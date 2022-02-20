@@ -1,7 +1,10 @@
 export interface Client {
-  id: number,
+  id?: number,
   firstName: string,
   lastName: string,
-  age: number,
-  birthdate: string
+  documentNumber: string,
+  phoneNumber: string,
+  accountNumber: string,
+  email: string,
+  address: string
 }

@@ -15,32 +15,43 @@ export class CreateClientComponent implements OnInit {
   formCreateClient: FormGroup = new FormGroup({
     firstName: new FormControl('', Validators.required),
     lastName: new FormControl('', Validators.required),
-    age: new FormControl('', [Validators.required, Validators.min(0)]),
-    birthdate: new FormControl('', Validators.required),
+    documentNumber: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(8)]),
+    phoneNumber: new FormControl('', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]),
+    accountNumber: new FormControl('', Validators.required),
+    email: new FormControl('', Validators.email),
+    address: new FormControl('', Validators.required)
   })
-  constructor(private readonly clientStateService: ClientstStateService,
-    private readonly route: Router) { }
+  constructor(
+    private readonly clientStateService: ClientstStateService,
+    private readonly route: Router
+  ) { }
 
   ngOnInit(): void {
+    this.formCreateClient.reset();
   }
-  validateFormControl(field: string): boolean {
+  validateFormControl(field: string): string {
     const formControl = this.formCreateClient.get(field);
     if (formControl) {
-      return formControl.hasError('required') || formControl.hasError('min');
+      if (formControl.hasError('required')) {
+        return 'Este campo es obligatorio';
+      }
+      if (formControl.hasError('minlength') || formControl.hasError('maxlength')) {
+        return 'Este campo debe ser llenado correctamente.';
+      }
     }
-    return false;
+    return '';
   }
   saveNewClient(): void {
-    const { firstName, lastName, age, birthdate } = this.formCreateClient.value;
-    const newBirthdate: string = moment(birthdate).format('YYYY-MM-DD');
+    const { firstName, lastName, documentNumber, phoneNumber, accountNumber, email, address } = this.formCreateClient.value;
     const newClient: Client = {
-      id: 0,
       firstName,
       lastName,
-      age,
-      birthdate: newBirthdate
+      phoneNumber,
+      documentNumber,
+      accountNumber,
+      email,
+      address
     };
-    console.log(newClient);
     this.clientStateService.create(newClient)
       .subscribe({
         next: () => {

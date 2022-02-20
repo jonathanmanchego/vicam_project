@@ -5,13 +5,13 @@
 export const environment = {
   production: false,
   firebase: {
-    apiKey: "AIzaSyAT0qQu7hKM-2aCfvn_K0xWOMxeyVxqrlc",
-    authDomain: "clientapptechtest.firebaseapp.com",
-    projectId: "clientapptechtest",
-    storageBucket: "clientapptechtest.appspot.com",
-    messagingSenderId: "895279699115",
-    appId: "1:895279699115:web:be4bafdce2fa8f187113ee",
-    measurementId: "G-EDZHBZS6E4"
+    apiKey: "AIzaSyD0GDEe6PITd0-IYSngrJ4nVaPpL7RzbrU",
+    authDomain: "demovicam.firebaseapp.com",
+    databaseURL: "https://demovicam-default-rtdb.firebaseio.com",
+    projectId: "demovicam",
+    storageBucket: "demovicam.appspot.com",
+    messagingSenderId: "827159020420",
+    appId: "1:827159020420:web:d310507c14075e83e5d3d1"
   }
 };
 

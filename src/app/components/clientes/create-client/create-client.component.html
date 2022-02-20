@@ -8,30 +8,56 @@
                 <mat-form-field appearance="outline">
                     <mat-label>Nombre:</mat-label>
                     <input matInput formControlName="firstName" autocomplete="name" />
-                    <mat-error *ngIf="validateFormControl('firstName')">Este campo es obligatorio</mat-error>
+                    <mat-error *ngIf="validateFormControl('firstName')">{{ validateFormControl("firstName") }}
+                    </mat-error>
                 </mat-form-field>
             </div>
             <div class="row">
                 <mat-form-field appearance="outline">
                     <mat-label>Apellidos:</mat-label>
                     <input matInput formControlName="lastName" autocomplete="family-name" />
-                    <mat-error *ngIf="validateFormControl('firstName')">Este campo es obligatorio</mat-error>
+                    <mat-error *ngIf="validateFormControl('firstName')">{{ validateFormControl("firstName") }}
+                    </mat-error>
                 </mat-form-field>
             </div>
             <div class="row">
                 <mat-form-field appearance="outline">
-                    <mat-label>Edad:</mat-label>
-                    <input matInput formControlName="age" type="number" autocomplete="off" />
-                    <mat-error *ngIf="validateFormControl('firstName')">Este campo es obligatorio</mat-error>
+                    <mat-label>DNI:</mat-label>
+                    <input matInput formControlName="documentNumber" type="text" autocomplete="off" />
+                    <mat-error *ngIf="validateFormControl('documentNumber')">{{ validateFormControl("documentNumber") }}
+                    </mat-error>
                 </mat-form-field>
             </div>
             <div class="row">
                 <mat-form-field appearance="outline">
-                    <mat-label>Fecha de cumpleaños:</mat-label>
-                    <input matInput formControlName="birthdate" readonly [matDatepicker]="picker" />
-                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
-                    <mat-error *ngIf="validateFormControl('firstName')">Este campo es obligatorio</mat-error>
+                    <mat-label>N° de celular:</mat-label>
+                    <input matInput formControlName="phoneNumber" type="tel" autocomplete="off" />
+                    <mat-error *ngIf="validateFormControl('phoneNumber')">{{ validateFormControl("phoneNumber") }}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="row">
+                <mat-form-field appearance="outline">
+                    <mat-label>N° de cuenta de ahorros:</mat-label>
+                    <input matInput formControlName="accountNumber" type="number" autocomplete="off" />
+                    <mat-error *ngIf="validateFormControl('accountNumber')">{{ validateFormControl("accountNumber") }}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="row">
+                <mat-form-field appearance="outline">
+                    <mat-label>Correo electrónico:</mat-label>
+                    <input matInput formControlName="email" type="email" autocomplete="off" />
+                    <mat-error *ngIf="validateFormControl('email')">{{ validateFormControl("email") }}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="row">
+                <mat-form-field appearance="outline">
+                    <mat-label>Dirección:</mat-label>
+                    <input matInput formControlName="address" autocomplete="off" />
+                    <mat-error *ngIf="validateFormControl('address')">{{ validateFormControl("address") }}
+                    </mat-error>
                 </mat-form-field>
             </div>
             <div class="row">

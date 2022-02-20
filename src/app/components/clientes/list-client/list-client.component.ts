@@ -17,19 +17,11 @@ export class ListClientComponent implements OnInit {
 
   ngOnInit(): void {
     this.clientsObservable = this.clientsStateService.items;
-    this.clientsStateService.observableList().subscribe(
+    /* this.clientsStateService.observableList().subscribe(
       () => {
         this.setAvgAges();
       }
-    )
-  }
-  dateDeath(client: Client): string {
-    if (!client.birthdate) {
-      return '';
-    }
-    const years = 60 - Math.ceil(Math.random() * 20);
-
-    return moment(client.birthdate).add('years', years).format('YYYY-MM-DD');
+    ) */
   }
   setAvgAges(): void {
     let avg = 0;
