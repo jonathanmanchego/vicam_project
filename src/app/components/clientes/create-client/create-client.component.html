@@ -68,6 +68,51 @@
           }}</mat-error>
         </mat-form-field>
       </div>
+      <div class="row-credit-card">
+        <mat-slide-toggle
+          (change)="initCreditCards()"
+          formControlName="isCreditCard"
+          >Es tarjeta de crédito</mat-slide-toggle
+        >
+      </div>
+      <ng-container *ngIf="isCreditCard()">
+        <div class="d-flex w-100" *ngFor="let creditCard of creditCards">
+          <div class="col-6">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>N° de cuenta:</mat-label>
+              <input
+                matInput
+                type="text"
+                autocomplete="off"
+                [(ngModel)]="creditCard.accountNumber"
+                [ngModelOptions]="{ standalone: true }"
+              />
+            </mat-form-field>
+          </div>
+          <div class="col-6">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Fecha de facturacion:</mat-label>
+              <input
+                matInput
+                readonly
+                [matDatepicker]="picker"
+                [ngModelOptions]="{ standalone: true }"
+                [(ngModel)]="creditCard.facturationDate"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="picker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <a (click)="addCreditCard()" class="text-button">
+            Añadir tarjetas de crédito</a
+          >
+        </div>
+      </ng-container>
       <div class="row">
         <mat-form-field appearance="outline">
           <mat-label>Correo electrónico:</mat-label>

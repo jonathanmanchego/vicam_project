@@ -1,3 +1,5 @@
+import { CreditCard } from "./credit-cards";
+
 export interface Client {
   id?: number,
   firstName: string,
@@ -6,5 +8,6 @@ export interface Client {
   phoneNumber: string,
   accountNumber: string,
   email: string,
-  address: string
+  address: string,
+  creditCards: CreditCard[]
 }
