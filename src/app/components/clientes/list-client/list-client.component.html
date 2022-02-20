@@ -15,9 +15,11 @@
         <tr>
           <th>Nombre</th>
           <th>Apellido</th>
-          <th>Edad</th>
-          <th>Fecha de nacimiento</th>
-          <th>Fecha de defunción</th>
+          <th>Documento</th>
+          <th>N° de celular</th>
+          <th>N° de cuenta</th>
+          <th>Correo Electrónico</th>
+          <th>Dirección</th>
         </tr>
       </thead>
       <tbody>
@@ -29,25 +31,19 @@
             <span [innerText]="client.lastName"></span>
           </td>
           <td>
-            <span [innerText]="client.age"></span>
+            <span [innerText]="client.documentNumber"></span>
           </td>
           <td>
-            <span [innerText]="client.birthdate"></span>
+            <span [innerText]="client.phoneNumber"></span>
           </td>
           <td>
-            <span [innerText]="dateDeath(client)"></span>
+            <span [innerText]="client.accountNumber"></span>
           </td>
-        </tr>
-        <tr>
-          <td colspan="3" align="right">Promedio edades</td>
           <td>
-            <span [innerText]="avgAges"></span>
+            <span [innerText]="client.email"></span>
           </td>
-        </tr>
-        <tr>
-          <td colspan="3" align="right">Desviacion estandar de edades</td>
           <td>
-            <span [innerText]="devStandar"></span>
+            <span [innerText]="client.address"></span>
           </td>
         </tr>
       </tbody>
