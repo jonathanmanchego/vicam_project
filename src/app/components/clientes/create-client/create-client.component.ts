@@ -6,11 +6,23 @@ import { ClientstStateService } from 'src/app/services/clients-state.service';
 import Swal from 'sweetalert2';
 import * as moment from 'moment';
 
+
+interface CreditCard {
+  
+  bankName: string,
+  accountNumber: string,
+  facturationDate: string
+}
+interface Bank {
+  id: number,
+  name: string
+}
 @Component({
   selector: 'app-create-client',
   templateUrl: './create-client.component.html',
   styleUrls: ['./create-client.component.scss']
 })
+
 export class CreateClientComponent implements OnInit {
   formCreateClient: FormGroup = new FormGroup({
     firstName: new FormControl('', Validators.required),
@@ -19,8 +31,25 @@ export class CreateClientComponent implements OnInit {
     phoneNumber: new FormControl('', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]),
     accountNumber: new FormControl('', Validators.required),
     email: new FormControl('', Validators.email),
-    address: new FormControl('', Validators.required)
-  })
+    address: new FormControl('', Validators.required),
+    isCreditCard: new FormControl(false)
+  });
+  creditCards: CreditCard[] = [];
+  banks: Bank[]=[ 
+    {
+      id: 1,
+      name: "SCOTIABANK"
+    },
+    {
+      id: 2,
+      name: "BBVA"
+    },
+    {
+      id: 3,
+      name: "BCP"
+    },
+  ];
+
   constructor(
     private readonly clientStateService: ClientstStateService,
     private readonly route: Router
@@ -28,6 +57,26 @@ export class CreateClientComponent implements OnInit {
 
   ngOnInit(): void {
     this.formCreateClient.reset();
+  }
+  initCreditCards(): void {
+    this.creditCards = [
+      {
+        bankName: '',
+        accountNumber: '',
+        facturationDate: ''
+      }
+    ];
+  }
+  addCreditCard(): void {
+    this.creditCards.push({
+      bankName: '',
+      accountNumber: '',
+      facturationDate: ''
+    });
+  }
+  isCreditCard(): boolean {
+    const { isCreditCard } = this.formCreateClient.value;
+    return isCreditCard;
   }
   validateFormControl(field: string): string {
     const formControl = this.formCreateClient.get(field);
@@ -43,6 +92,11 @@ export class CreateClientComponent implements OnInit {
   }
   saveNewClient(): void {
     const { firstName, lastName, documentNumber, phoneNumber, accountNumber, email, address } = this.formCreateClient.value;
+    const creditCards: CreditCard[] = this.creditCards.map(item => ({
+      accountNumber: item.accountNumber,
+      bankName: item.bankName,
+      facturationDate: moment(item.facturationDate).format('DD-MM-YYYY')
+    }));
     const newClient: Client = {
       firstName,
       lastName,
@@ -50,8 +104,10 @@ export class CreateClientComponent implements OnInit {
       documentNumber,
       accountNumber,
       email,
-      address
+      address,
+      creditCards
     };
+  
     this.clientStateService.create(newClient)
       .subscribe({
         next: () => {
