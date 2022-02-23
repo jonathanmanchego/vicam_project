@@ -8,8 +8,14 @@ import * as moment from 'moment';
 
 
 interface CreditCard {
+  
+  bankName: string,
   accountNumber: string,
   facturationDate: string
+}
+interface Bank {
+  id: number,
+  name: string
 }
 @Component({
   selector: 'app-create-client',
@@ -29,6 +35,21 @@ export class CreateClientComponent implements OnInit {
     isCreditCard: new FormControl(false)
   });
   creditCards: CreditCard[] = [];
+  banks: Bank[]=[ 
+    {
+      id: 1,
+      name: "SCOTIABANK"
+    },
+    {
+      id: 2,
+      name: "BBVA"
+    },
+    {
+      id: 3,
+      name: "BCP"
+    },
+  ];
+
   constructor(
     private readonly clientStateService: ClientstStateService,
     private readonly route: Router
@@ -40,6 +61,7 @@ export class CreateClientComponent implements OnInit {
   initCreditCards(): void {
     this.creditCards = [
       {
+        bankName: '',
         accountNumber: '',
         facturationDate: ''
       }
@@ -47,6 +69,7 @@ export class CreateClientComponent implements OnInit {
   }
   addCreditCard(): void {
     this.creditCards.push({
+      bankName: '',
       accountNumber: '',
       facturationDate: ''
     });
@@ -71,6 +94,7 @@ export class CreateClientComponent implements OnInit {
     const { firstName, lastName, documentNumber, phoneNumber, accountNumber, email, address } = this.formCreateClient.value;
     const creditCards: CreditCard[] = this.creditCards.map(item => ({
       accountNumber: item.accountNumber,
+      bankName: item.bankName,
       facturationDate: moment(item.facturationDate).format('DD-MM-YYYY')
     }));
     const newClient: Client = {
@@ -83,8 +107,7 @@ export class CreateClientComponent implements OnInit {
       address,
       creditCards
     };
-    console.log(creditCards)
-    return;
+  
     this.clientStateService.create(newClient)
       .subscribe({
         next: () => {
