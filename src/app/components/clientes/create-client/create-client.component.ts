@@ -5,18 +5,19 @@ import { Client } from 'src/app/models/client';
 import { ClientstStateService } from 'src/app/services/clients-state.service';
 import Swal from 'sweetalert2';
 import * as moment from 'moment';
+import { MatSelect, MatSelectChange } from '@angular/material/select';
 
-
-interface CreditCard {
-  
-  bankName: string,
-  accountNumber: string,
-  facturationDate: string
-}
 interface Bank {
   id: number,
-  name: string
+  name: string,
+  facturationDate: number
 }
+interface CreditCard {
+  accountNumber: string,
+  facturationDate: number, 
+  bank?: Bank
+}
+
 @Component({
   selector: 'app-create-client',
   templateUrl: './create-client.component.html',
@@ -33,20 +34,24 @@ export class CreateClientComponent implements OnInit {
     email: new FormControl('', Validators.email),
     address: new FormControl('', Validators.required),
     isCreditCard: new FormControl(false)
+  
   });
   creditCards: CreditCard[] = [];
   banks: Bank[]=[ 
     {
       id: 1,
-      name: "SCOTIABANK"
+      name: "SCOTIABANK",
+      facturationDate: 24
     },
     {
       id: 2,
-      name: "BBVA"
+      name: "BBVA",
+      facturationDate: 15
     },
     {
       id: 3,
-      name: "BCP"
+      name: "BCP",
+      facturationDate: 6
     },
   ];
 
@@ -61,17 +66,15 @@ export class CreateClientComponent implements OnInit {
   initCreditCards(): void {
     this.creditCards = [
       {
-        bankName: '',
         accountNumber: '',
-        facturationDate: ''
+        facturationDate: 1 
       }
     ];
   }
   addCreditCard(): void {
     this.creditCards.push({
-      bankName: '',
       accountNumber: '',
-      facturationDate: ''
+      facturationDate: 2
     });
   }
   isCreditCard(): boolean {
@@ -90,12 +93,17 @@ export class CreateClientComponent implements OnInit {
     }
     return '';
   }
+  setFacturationDate(event: MatSelectChange, creditCard: CreditCard):void{
+    const bank = this.banks.find(bank=>bank.id === event.value );
+    creditCard.facturationDate=  bank?bank.facturationDate: 1;
+    
+  }
   saveNewClient(): void {
     const { firstName, lastName, documentNumber, phoneNumber, accountNumber, email, address } = this.formCreateClient.value;
     const creditCards: CreditCard[] = this.creditCards.map(item => ({
       accountNumber: item.accountNumber,
-      bankName: item.bankName,
-      facturationDate: moment(item.facturationDate).format('DD-MM-YYYY')
+      facturationDate: Number(item.facturationDate),
+      bank: item.bank,
     }));
     const newClient: Client = {
       firstName,
