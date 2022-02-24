@@ -1,22 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Client } from 'src/app/models/client';
+import { Client } from 'src/app/commons/models/client';
 import { ClientstStateService } from 'src/app/services/clients-state.service';
 import Swal from 'sweetalert2';
-import * as moment from 'moment';
-import { MatSelect, MatSelectChange } from '@angular/material/select';
+import { MatSelectChange } from '@angular/material/select';
+import { CreditCard } from 'src/app/commons/models/credit-card';
+import { Bank } from 'src/app/commons/models/bank';
+import { BanksStateService } from 'src/app/services/banks-state.service';
 
-interface Bank {
-  id: number,
-  name: string,
-  facturationDate: number
-}
-interface CreditCard {
-  accountNumber: string,
-  facturationDate: number, 
-  bank?: Bank
-}
 
 @Component({
   selector: 'app-create-client',
@@ -30,51 +22,57 @@ export class CreateClientComponent implements OnInit {
     lastName: new FormControl('', Validators.required),
     documentNumber: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(8)]),
     phoneNumber: new FormControl('', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]),
+    bank: new FormControl('', Validators.required),
     accountNumber: new FormControl('', Validators.required),
-    email: new FormControl('', Validators.email),
+    email: new FormControl('', [Validators.required, Validators.email]),
     address: new FormControl('', Validators.required),
     isCreditCard: new FormControl(false)
-  
+
   });
   creditCards: CreditCard[] = [];
-  banks: Bank[]=[ 
-    {
-      id: 1,
-      name: "SCOTIABANK",
-      facturationDate: 24
-    },
-    {
-      id: 2,
-      name: "BBVA",
-      facturationDate: 15
-    },
-    {
-      id: 3,
-      name: "BCP",
-      facturationDate: 6
-    },
-  ];
+  banks: Bank[] = [];
 
   constructor(
     private readonly clientStateService: ClientstStateService,
+    private readonly banksStateService: BanksStateService,
     private readonly route: Router
   ) { }
 
   ngOnInit(): void {
     this.formCreateClient.reset();
+    this.banksStateService.items
+      .subscribe(
+        result => {
+          this.banks = result;
+        }
+      );
   }
   initCreditCards(): void {
-    this.creditCards = [
-      {
-        accountNumber: '',
-        facturationDate: 1 
-      }
-    ];
+    if (this.isCreditCard()) {
+      this.creditCards = [
+        {
+          accountNumber: '',
+          facturationDate: 1,
+          bank: {
+            id: 0,
+            facturationDate: 1,
+            name: ''
+          }
+        }
+      ];
+    } else {
+      this.creditCards = [];
+    }
   }
   addCreditCard(): void {
     this.creditCards.push({
       accountNumber: '',
-      facturationDate: 2
+      facturationDate: 2,
+      bank: {
+        id: 0,
+        facturationDate: 1,
+        name: ''
+      }
     });
   }
   isCreditCard(): boolean {
@@ -93,18 +91,30 @@ export class CreateClientComponent implements OnInit {
     }
     return '';
   }
-  setFacturationDate(event: MatSelectChange, creditCard: CreditCard):void{
-    const bank = this.banks.find(bank=>bank.id === event.value );
-    creditCard.facturationDate=  bank?bank.facturationDate: 1;
-    
+  setFacturationDate(event: MatSelectChange, creditCard: CreditCard): void {
+    const bank = this.banks.find(bank => bank.id === event.value);
+    if (bank) {
+      creditCard.facturationDate = bank.facturationDate ? bank.facturationDate : 1;
+      creditCard.bank = bank;
+    }
+
   }
   saveNewClient(): void {
-    const { firstName, lastName, documentNumber, phoneNumber, accountNumber, email, address } = this.formCreateClient.value;
+    if (!this.formCreateClient.valid) {
+      Swal.fire({
+        title: '¡Atención!',
+        text: 'Información incompleta',
+        icon: 'info'
+      });
+      return;
+    }
+    const { firstName, lastName, documentNumber, phoneNumber, accountNumber, email, address, bank } = this.formCreateClient.value;
     const creditCards: CreditCard[] = this.creditCards.map(item => ({
       accountNumber: item.accountNumber,
       facturationDate: Number(item.facturationDate),
       bank: item.bank,
     }));
+    const bankSelected = this.banks.filter(item => item.id === +bank)[0];
     const newClient: Client = {
       firstName,
       lastName,
@@ -113,9 +123,10 @@ export class CreateClientComponent implements OnInit {
       accountNumber,
       email,
       address,
-      creditCards
+      creditCards,
+      bank: bankSelected
     };
-  
+
     this.clientStateService.create(newClient)
       .subscribe({
         next: () => {

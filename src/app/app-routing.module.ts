@@ -12,6 +12,10 @@ const routes: Routes = [
     loadChildren: () => import('./components/clientes/clientes.module').then(m => m.ClientesModule)
   },
   {
+    path: 'resources',
+    loadChildren: () => import('./resources/resources.module').then(m => m.ResourcesModule)
+  },
+  {
     path: '**',
     redirectTo: '/clientes'
   }

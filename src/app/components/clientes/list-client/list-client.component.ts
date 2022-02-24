@@ -1,8 +1,6 @@
 import { ClientstStateService } from './../../../services/clients-state.service';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Client } from 'src/app/models/client';
-import * as moment from 'moment';
 
 @Component({
   selector: 'app-list-client',

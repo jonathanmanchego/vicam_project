@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/compat/database'
-import { Client } from '../models/client';
+import { Client } from '../commons/models/client';
 import { StateService } from './state.service';
 @Injectable({
   providedIn: 'root'

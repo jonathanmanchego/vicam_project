@@ -55,7 +55,18 @@
         </mat-form-field>
       </div>
       <div class="row">
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" class="col-4">
+          <mat-label>Nombre de Banco:</mat-label>
+          <mat-select formControlName="bank">
+            <mat-option *ngFor="let bank of banks" [value]="bank.id">
+              {{ bank.name }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="validateFormControl('bank')"
+            >{{ validateFormControl('bank') }}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="col-8">
           <mat-label>N° de cuenta de ahorros:</mat-label>
           <input
             matInput
@@ -76,13 +87,14 @@
         >
       </div>
       <ng-container *ngIf="isCreditCard()">
-        <div class="d-column w-100" *ngFor="let creditCard of creditCards">
-          <div class="col-6">
-            <mat-form-field appearance="fill">
+        <div
+          class="custom-credit-card w-100"
+          *ngFor="let creditCard of creditCards"
+        >
+          <div class="col-grid">
+            <mat-form-field appearance="outline" class="w-100">
               <mat-label>Nombre de Banco:</mat-label>
               <mat-select
-                [(ngModel)]="creditCard.bank"
-                [ngModelOptions]="{ standalone: true }"
                 (selectionChange)="setFacturationDate($event, creditCard)"
               >
                 <mat-option *ngFor="let bank of banks" [value]="bank.id">
@@ -91,7 +103,7 @@
               </mat-select>
             </mat-form-field>
           </div>
-          <div class="col-6">
+          <div class="col-grid">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Fecha de facturacion:</mat-label>
               <input
@@ -104,7 +116,7 @@
             </mat-form-field>
           </div>
 
-          <div class="col-6">
+          <div class="col-grid double-cols">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>N° de cuenta:</mat-label>
               <input

@@ -1,13 +1,17 @@
 .row-credit-card {
-    width: 100%;
+  width: 100%;
 }
 
 .text-button {
-    color: rgb(62, 91, 218);
-    cursor: pointer;
-    text-decoration: underline;
+  color: rgb(62, 91, 218);
+  cursor: pointer;
+  text-decoration: underline;
 }
 
-.d-column {
-    flex-direction: column;
+.custom-credit-card {
+  display: grid;
+  grid-template-columns: 1fr .4fr 2fr;
+  gap: 0 1rem;
+  width: 90%;
+  padding: .5rem 1rem;
 }

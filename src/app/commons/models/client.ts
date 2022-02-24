@@ -1,4 +1,5 @@
-import { CreditCard } from "./credit-cards";
+import { Bank } from "./bank";
+import { CreditCard } from "./credit-card";
 
 export interface Client {
   id?: number,
@@ -10,4 +11,5 @@ export interface Client {
   email: string,
   address: string,
   creditCards: CreditCard[]
+  bank: Bank
 }

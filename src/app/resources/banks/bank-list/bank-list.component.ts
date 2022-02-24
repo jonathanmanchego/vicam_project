@@ -1,4 +1,6 @@
+import { Observable } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
+import { BanksStateService } from 'src/app/services/banks-state.service';
 
 @Component({
   selector: 'app-bank-list',
@@ -6,10 +8,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./bank-list.component.scss']
 })
 export class BankListComponent implements OnInit {
-
-  constructor() { }
+  banksObservable: Observable<Array<any>> = new Observable<Array<any>>();
+  constructor(private readonly banksStateService: BanksStateService) { }
 
   ngOnInit(): void {
+    this.banksObservable = this.banksStateService.items;
   }
 
 }

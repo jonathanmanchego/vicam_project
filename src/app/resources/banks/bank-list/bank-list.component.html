@@ -1,1 +1,32 @@
-<p>bank-list works!</p>
+<div class="row py-3">
+  <button
+    class="col-auto"
+    mat-raised-button
+    color="primary"
+    [routerLink]="['/resources/bancos/create']"
+  >
+    Nuevo Banco
+  </button>
+</div>
+<div class="row">
+  <div class="list">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Día de facturación</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let bank of banksObservable | async">
+          <td scope="row">
+            <span [innerText]="bank.name"></span>
+          </td>
+          <td>
+            <span [innerText]="bank.facturationDate"></span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
