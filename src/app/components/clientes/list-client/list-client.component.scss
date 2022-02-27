@@ -1,0 +1,27 @@
+.table-custom-grid {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.head-custom-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  border-radius: 16px 16px 0 0;
+  background-color: rgb(75, 83, 194);
+
+  .col-head-custom-grid {
+    padding: 1rem 1.5rem;
+  }
+
+  .col-head-custom-grid span {
+    color: white;
+  }
+}
+
+.body-row-custom-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+}

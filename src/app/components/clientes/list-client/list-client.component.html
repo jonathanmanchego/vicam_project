@@ -10,43 +10,93 @@
 </div>
 <div class="row">
   <div class="list">
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Nombre</th>
-          <th>Apellido</th>
-          <th>Documento</th>
-          <th>N° de celular</th>
-          <th>N° de cuenta</th>
-          <th>Correo Electrónico</th>
-          <th>Dirección</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let client of clientsObservable | async">
-          <td scope="row">
-            <span [innerText]="client.firstName"></span>
-          </td>
-          <td>
-            <span [innerText]="client.lastName"></span>
-          </td>
-          <td>
-            <span [innerText]="client.documentNumber"></span>
-          </td>
-          <td>
-            <span [innerText]="client.phoneNumber"></span>
-          </td>
-          <td>
-            <span [innerText]="client.accountNumber"></span>
-          </td>
-          <td>
-            <span [innerText]="client.email"></span>
-          </td>
-          <td>
-            <span [innerText]="client.address"></span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-custom-grid">
+      <div class="head-custom-grid">
+        <div class="col-head-custom-grid">
+          <span>Nombre</span>
+        </div>
+        <div class="col-head-custom-grid">
+          <span>Apellido</span>
+        </div>
+        <div class="col-head-custom-grid">
+          <span>Documento</span>
+        </div>
+        <div class="col-head-custom-grid">
+          <span>N° de celular</span>
+        </div>
+        <div class="col-head-custom-grid">
+          <span>Correo Electrónico</span>
+        </div>
+        <div class="col-head-custom-grid">
+          <span>Dirección</span>
+        </div>
+      </div>
+      <div class="body-custom-grid">
+        <mat-accordion class="accordion-body">
+          <mat-expansion-panel *ngFor="let client of clients">
+            <mat-expansion-panel-header>
+              <div class="body-row-custom-grid">
+                <div class="col-body-custom-grid">
+                  <span [innerText]="client.firstName"></span>
+                </div>
+                <div class="col-body-custom-grid">
+                  <span [innerText]="client.lastName"></span>
+                </div>
+                <div class="col-body-custom-grid">
+                  <span [innerText]="client.documentNumber"></span>
+                </div>
+                <div class="col-body-custom-grid">
+                  <span [innerText]="client.phoneNumber"></span>
+                </div>
+                <div class="col-body-custom-grid">
+                  <span [innerText]="client.email"></span>
+                </div>
+                <div class="col-body-custom-grid">
+                  <span [innerText]="client.address"></span>
+                </div>
+              </div>
+            </mat-expansion-panel-header>
+            <div class="body-row-custom-grid">
+              <div class="col-body-custom-grid">
+                <span>Cuenta de ahorros:</span>
+              </div>
+            </div>
+            <div class="body-row-custom-grid">
+              <div class="col-body-custom-grid"></div>
+              <div class="col-body-custom-grid"></div>
+              <div class="col-body-custom-grid">
+                <span [innerText]="client.bank.name"></span>
+              </div>
+              <div class="col-body-custom-grid">
+                <span [innerText]="client.accountNumber"></span>
+              </div>
+            </div>
+            <ng-container *ngIf="client.creditCards.length > 0">
+              <div class="body-row-custom-grid">
+                <div class="col-body-custom-grid">
+                  <span>Tarjetas de credito:</span>
+                </div>
+              </div>
+              <div
+                class="body-row-custom-grid"
+                *ngFor="let creditCard of client.creditCards"
+              >
+                <div class="col-body-custom-grid"></div>
+                <div class="col-body-custom-grid"></div>
+                <div class="col-body-custom-grid">
+                  <span [innerText]="creditCard.bank.name"></span>
+                </div>
+                <div class="col-body-custom-grid">
+                  <span [innerText]="creditCard.facturationDate"></span>
+                </div>
+                <div class="col-body-custom-grid">
+                  <span [innerText]="creditCard.accountNumber"></span>
+                </div>
+              </div>
+            </ng-container>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+    </div>
   </div>
 </div>
