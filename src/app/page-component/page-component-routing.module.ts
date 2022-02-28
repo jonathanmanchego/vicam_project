@@ -1,3 +1,4 @@
+import { AuthLayoutUsersComponent } from './auth-layout-users/auth-layout-users.component';
 import { PanelLayoutComponent } from './panel-layout/panel-layout.component';
 import { PanelComponentsModule } from './../components/panel-components/panel-components.module';
 import { NgModule } from '@angular/core';
@@ -11,6 +12,10 @@ const routes: Routes = [
       import('../components/panel-components/panel-components.module').then(
         (m) => PanelComponentsModule
       ),
+  },
+  {
+    path: 'login/vicam',
+    component: AuthLayoutUsersComponent,
   },
 ];
 

@@ -5,7 +5,7 @@ import { CreateClientComponent } from './create-client/create-client.component';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'list',
     component: ListClientComponent
   },
   {
