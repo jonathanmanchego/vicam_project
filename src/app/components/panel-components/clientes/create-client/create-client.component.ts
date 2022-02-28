@@ -2,32 +2,37 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Client } from 'src/app/commons/models/client';
-import { ClientstStateService } from 'src/app/services/clients-state.service';
 import Swal from 'sweetalert2';
 import { MatSelectChange } from '@angular/material/select';
 import { CreditCard } from 'src/app/commons/models/credit-card';
 import { Bank } from 'src/app/commons/models/bank';
-import { BanksStateService } from 'src/app/services/banks-state.service';
-
+import { BanksStateService } from 'src/app/services/state/banks-state.service';
+import { ClientstStateService } from 'src/app/services/state/clients-state.service';
 
 @Component({
   selector: 'app-create-client',
   templateUrl: './create-client.component.html',
-  styleUrls: ['./create-client.component.scss']
+  styleUrls: ['./create-client.component.scss'],
 })
-
 export class CreateClientComponent implements OnInit {
   formCreateClient: FormGroup = new FormGroup({
     firstName: new FormControl('', Validators.required),
     lastName: new FormControl('', Validators.required),
-    documentNumber: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(8)]),
-    phoneNumber: new FormControl('', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]),
+    documentNumber: new FormControl('', [
+      Validators.required,
+      Validators.minLength(8),
+      Validators.maxLength(8),
+    ]),
+    phoneNumber: new FormControl('', [
+      Validators.required,
+      Validators.minLength(9),
+      Validators.maxLength(9),
+    ]),
     bank: new FormControl('', Validators.required),
     accountNumber: new FormControl('', Validators.required),
     email: new FormControl('', [Validators.required, Validators.email]),
     address: new FormControl('', Validators.required),
-    isCreditCard: new FormControl(false)
-
+    isCreditCard: new FormControl(false),
   });
   creditCards: CreditCard[] = [];
   banks: Bank[] = [];
@@ -36,16 +41,13 @@ export class CreateClientComponent implements OnInit {
     private readonly clientStateService: ClientstStateService,
     private readonly banksStateService: BanksStateService,
     private readonly route: Router
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.formCreateClient.reset();
-    this.banksStateService.items
-      .subscribe(
-        result => {
-          this.banks = result;
-        }
-      );
+    this.banksStateService.items.subscribe((result) => {
+      this.banks = result;
+    });
   }
   initCreditCards(): void {
     if (this.isCreditCard()) {
@@ -56,9 +58,9 @@ export class CreateClientComponent implements OnInit {
           bank: {
             id: 0,
             facturationDate: 1,
-            name: ''
-          }
-        }
+            name: '',
+          },
+        },
       ];
     } else {
       this.creditCards = [];
@@ -71,8 +73,8 @@ export class CreateClientComponent implements OnInit {
       bank: {
         id: 0,
         facturationDate: 1,
-        name: ''
-      }
+        name: '',
+      },
     });
   }
   isCreditCard(): boolean {
@@ -85,36 +87,49 @@ export class CreateClientComponent implements OnInit {
       if (formControl.hasError('required')) {
         return 'Este campo es obligatorio';
       }
-      if (formControl.hasError('minlength') || formControl.hasError('maxlength')) {
+      if (
+        formControl.hasError('minlength') ||
+        formControl.hasError('maxlength')
+      ) {
         return 'Este campo debe ser llenado correctamente.';
       }
     }
     return '';
   }
   setFacturationDate(event: MatSelectChange, creditCard: CreditCard): void {
-    const bank = this.banks.find(bank => bank.id === event.value);
+    const bank = this.banks.find((bank) => bank.id === event.value);
     if (bank) {
-      creditCard.facturationDate = bank.facturationDate ? bank.facturationDate : 1;
+      creditCard.facturationDate = bank.facturationDate
+        ? bank.facturationDate
+        : 1;
       creditCard.bank = bank;
     }
-
   }
   saveNewClient(): void {
     if (!this.formCreateClient.valid) {
       Swal.fire({
         title: '¡Atención!',
         text: 'Información incompleta',
-        icon: 'info'
+        icon: 'info',
       });
       return;
     }
-    const { firstName, lastName, documentNumber, phoneNumber, accountNumber, email, address, bank } = this.formCreateClient.value;
-    const creditCards: CreditCard[] = this.creditCards.map(item => ({
+    const {
+      firstName,
+      lastName,
+      documentNumber,
+      phoneNumber,
+      accountNumber,
+      email,
+      address,
+      bank,
+    } = this.formCreateClient.value;
+    const creditCards: CreditCard[] = this.creditCards.map((item) => ({
       accountNumber: item.accountNumber,
       facturationDate: Number(item.facturationDate),
       bank: item.bank,
     }));
-    const bankSelected = this.banks.filter(item => item.id === +bank)[0];
+    const bankSelected = this.banks.filter((item) => item.id === +bank)[0];
     const newClient: Client = {
       firstName,
       lastName,
@@ -124,27 +139,25 @@ export class CreateClientComponent implements OnInit {
       email,
       address,
       creditCards,
-      bank: bankSelected
+      bank: bankSelected,
     };
 
-    this.clientStateService.create(newClient)
-      .subscribe({
-        next: () => {
-          Swal.fire({
-            title: 'Correcto',
-            text: 'Se pudo guardar correctamente',
-            icon: 'success'
-          });
-          this.route.navigateByUrl('/clientes/list');
-        },
-        error: () => {
-          Swal.fire({
-            title: '¡Atención!',
-            text: 'No se pudo guardar correctamente',
-            icon: 'info'
-          });
-        }
-      }
-      );
+    this.clientStateService.create(newClient).subscribe({
+      next: () => {
+        Swal.fire({
+          title: 'Correcto',
+          text: 'Se pudo guardar correctamente',
+          icon: 'success',
+        });
+        this.route.navigateByUrl('/clientes/list');
+      },
+      error: () => {
+        Swal.fire({
+          title: '¡Atención!',
+          text: 'No se pudo guardar correctamente',
+          icon: 'info',
+        });
+      },
+    });
   }
 }

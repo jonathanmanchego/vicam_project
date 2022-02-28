@@ -1,7 +1,7 @@
-import { ClientstStateService } from './../../../services/clients-state.service';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Client } from 'src/app/commons/models/client';
+import { ClientstStateService } from 'src/app/services/state/clients-state.service';
 
 @Component({
   selector: 'app-list-client',

@@ -1,12 +1,13 @@
 import { inject, Injectable } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/compat/database'
-import { Client } from '../commons/models/client';
+import { Bank } from '../../commons/models/bank';
 import { StateService } from './state.service';
+
 @Injectable({
   providedIn: 'root'
 })
-export class ClientstStateService extends StateService<Client>{
-  override table = 'clients';
+export class BanksStateService extends StateService<Bank>{
+  override table = 'banks';
 
   constructor() {
     super();

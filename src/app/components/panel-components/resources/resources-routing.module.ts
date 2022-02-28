@@ -6,16 +6,16 @@ import { RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: 'bancos/list',
-    component: BankListComponent
+    component: BankListComponent,
   },
   {
     path: 'bancos/create',
-    component: BankCreateComponent
-  }
+    component: BankCreateComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class ResourcesRoutingModule { }
+export class ResourcesRoutingModule {}

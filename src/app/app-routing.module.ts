@@ -1,28 +1,23 @@
+import { PanelLayoutComponent } from './page-component/panel-layout/panel-layout.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: '/clientes/create',
-    pathMatch: 'full'
-  },
-  {
-    path: 'clientes',
-    loadChildren: () => import('./components/clientes/clientes.module').then(m => m.ClientesModule)
-  },
-  {
-    path: 'resources',
-    loadChildren: () => import('./resources/resources.module').then(m => m.ResourcesModule)
+    loadChildren: () =>
+      import('./page-component/page-component.module').then(
+        (m) => m.PageComponentModule
+      ),
   },
   {
     path: '**',
-    redirectTo: '/clientes'
-  }
+    redirectTo: '',
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

@@ -1,0 +1,16 @@
+.example-container {
+  width: 100%;
+  min-height: 100vh;
+}
+
+.sidenav-content {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.example-sidenav {
+  padding: 1.5rem;
+}

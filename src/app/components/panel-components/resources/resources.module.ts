@@ -13,12 +13,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSelectModule } from '@angular/material/select';
 
-
 @NgModule({
-  declarations: [
-    BankCreateComponent,
-    BankListComponent
-  ],
+  declarations: [BankCreateComponent, BankListComponent],
   imports: [
     CommonModule,
     ResourcesRoutingModule,
@@ -30,7 +26,7 @@ import { MatSelectModule } from '@angular/material/select';
     MatIconModule,
     MatDatepickerModule,
     MatSlideToggleModule,
-    MatSelectModule
-  ]
+    MatSelectModule,
+  ],
 })
-export class ResourcesModule { }
+export class ResourcesModule {}

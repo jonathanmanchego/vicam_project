@@ -1,22 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { BanksStateService } from 'src/app/services/banks-state.service';
+import { BanksStateService } from 'src/app/services/state/banks-state.service';
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-bank-create',
   templateUrl: './bank-create.component.html',
-  styleUrls: ['./bank-create.component.scss']
+  styleUrls: ['./bank-create.component.scss'],
 })
 export class BankCreateComponent implements OnInit {
   formCreateBank: FormGroup = new FormGroup({
     name: new FormControl('', Validators.required),
-    facturationDate: new FormControl(1, Validators.required)
+    facturationDate: new FormControl(1, Validators.required),
   });
   constructor(
     private readonly banksStateService: BanksStateService,
-    private readonly route: Router) { }
+    private readonly route: Router
+  ) {}
 
   ngOnInit(): void {
     this.formCreateBank.reset();
@@ -27,7 +28,10 @@ export class BankCreateComponent implements OnInit {
       if (formControl.hasError('required')) {
         return 'Este campo es obligatorio';
       }
-      if (formControl.hasError('minlength') || formControl.hasError('maxlength')) {
+      if (
+        formControl.hasError('minlength') ||
+        formControl.hasError('maxlength')
+      ) {
         return 'Este campo debe ser llenado correctamente.';
       }
     }
@@ -38,7 +42,7 @@ export class BankCreateComponent implements OnInit {
       Swal.fire({
         title: '¡Atención!',
         text: 'Información incompleta',
-        icon: 'info'
+        icon: 'info',
       });
       return;
     }
@@ -46,26 +50,24 @@ export class BankCreateComponent implements OnInit {
     const bankToCreate = {
       id: 0,
       name,
-      facturationDate: +facturationDate
-    }
-    this.banksStateService.create(bankToCreate)
-      .subscribe({
-        next: () => {
-          Swal.fire({
-            title: 'Correcto',
-            text: 'Se pudo guardar correctamente',
-            icon: 'success'
-          });
-          this.route.navigateByUrl('/resources/bancos/list');
-        },
-        error: () => {
-          Swal.fire({
-            title: '¡Atención!',
-            text: 'No se pudo guardar correctamente',
-            icon: 'info'
-          });
-        }
-      }
-      );
+      facturationDate: +facturationDate,
+    };
+    this.banksStateService.create(bankToCreate).subscribe({
+      next: () => {
+        Swal.fire({
+          title: 'Correcto',
+          text: 'Se pudo guardar correctamente',
+          icon: 'success',
+        });
+        this.route.navigateByUrl('/resources/bancos/list');
+      },
+      error: () => {
+        Swal.fire({
+          title: '¡Atención!',
+          text: 'No se pudo guardar correctamente',
+          icon: 'info',
+        });
+      },
+    });
   }
 }
