@@ -11,6 +11,42 @@
   justify-content: center;
 }
 
-.example-sidenav {
-  padding: 1.5rem;
+.logo-sidenav {
+  width: 85%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+
+  .logo-sidenav-img {
+    max-width: 125px;
+  }
+}
+
+.menu-sidenav {
+  width: 100%;
+}
+
+.mat-list-menu {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 2rem 0;
+  width: 100%;
+
+  .list-item-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+
+    mat-icon {
+      font-size: 2rem;
+      width: 2rem;
+      height: 2rem;
+      line-height: 2rem;
+    }
+  }
 }

@@ -1,20 +1,41 @@
 <mat-drawer-container class="example-container" autosize>
-    <mat-drawer #drawer class="example-sidenav" mode="side" [opened]="isOpenSidenav">
-        <div class="menu-sidenav">
-            <mat-list role="list">
-                <mat-list-item role="button" (click)="goToRoute('/clientes/list')">
-                    Clientes
-                    <mat-icon>account_circle</mat-icon>
-                </mat-list-item>
-
-                <mat-list-item role="button" (click)="goToRoute('/resources/bancos/list')">
-                    Bancos
-                </mat-list-item>
-            </mat-list>
-        </div>
-    </mat-drawer>
-    <div class="sidenav-content">
-        <app-toolbar-panel (toggleMenu)="toggleMenu()"></app-toolbar-panel>
-        <router-outlet></router-outlet>
+  <mat-drawer #drawer mode="over" [opened]="isOpenSidenav">
+    <div class="logo-sidenav">
+      <img
+        class="logo-sidenav-img"
+        src="./assets/images/logo/logo-sidenav.jpg"
+        alt="Logo VICAM CG"
+      />
     </div>
+    <div class="menu-sidenav">
+      <mat-list role="list" class="mat-list-menu">
+        <mat-list-item
+          class="mat-list-item-menu"
+          role="button"
+          (click)="goToRoute('/clientes/list')"
+        >
+          <div class="list-item-content">
+            <mat-icon matTooltip="Clientes" matTooltipPosition="right"
+              >account_circle</mat-icon
+            >
+          </div>
+        </mat-list-item>
+        <mat-list-item
+          class="mat-list-item-menu"
+          role="button"
+          (click)="goToRoute('/resources/bancos/list')"
+        >
+          <div class="list-item-content">
+            <mat-icon matTooltip="Bancos" matTooltipPosition="right"
+              >account_balance</mat-icon
+            >
+          </div>
+        </mat-list-item>
+      </mat-list>
+    </div>
+  </mat-drawer>
+  <div class="sidenav-content">
+    <app-toolbar-panel (toggleMenu)="toggleMenu()"></app-toolbar-panel>
+    <router-outlet></router-outlet>
+  </div>
 </mat-drawer-container>

@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { ToolbarPanelComponent } from './toolbar-panel/toolbar-panel.component';
 
@@ -20,6 +21,7 @@ const MaterialModules = [
   MatToolbarModule,
   MatInputModule,
   MatListModule,
+  MatTooltipModule,
 ];
 
 const components = [SidenavComponent, ToolbarPanelComponent];
