@@ -1,27 +1,20 @@
 <mat-drawer-container class="example-container" autosize>
-  <mat-drawer
-    #drawer
-    class="example-sidenav"
-    mode="side"
-    [opened]="isOpenSidenav"
-  >
-    <div class="menu-sidenav">
-      <mat-list role="list">
-        <mat-list-item role="button" (click)="goToRoute('/clientes/list')"
-          >Clientes</mat-list-item
-        >
-        <mat-list-item
-          role="button"
-          (click)="goToRoute('/resources/bancos/list')"
-        >
-          Bancos
-        </mat-list-item>
-      </mat-list>
-    </div>
-  </mat-drawer>
+    <mat-drawer #drawer class="example-sidenav" mode="side" [opened]="isOpenSidenav">
+        <div class="menu-sidenav">
+            <mat-list role="list">
+                <mat-list-item role="button" (click)="goToRoute('/clientes/list')">
+                    Clientes
+                    <mat-icon>account_circle</mat-icon>
+                </mat-list-item>
 
-  <div class="sidenav-content">
-    <app-toolbar-panel (toggleMenu)="toggleMenu()"></app-toolbar-panel>
-    <router-outlet></router-outlet>
-  </div>
+                <mat-list-item role="button" (click)="goToRoute('/resources/bancos/list')">
+                    Bancos
+                </mat-list-item>
+            </mat-list>
+        </div>
+    </mat-drawer>
+    <div class="sidenav-content">
+        <app-toolbar-panel (toggleMenu)="toggleMenu()"></app-toolbar-panel>
+        <router-outlet></router-outlet>
+    </div>
 </mat-drawer-container>
