@@ -5,11 +5,6 @@ import { RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'users/login',
-    pathMatch: 'full',
-  },
-  {
-    path: '',
     loadChildren: () =>
       import('./page-component/page-component.module').then(
         (m) => m.PageComponentModule

@@ -2,7 +2,6 @@
   width: 100vw;
   height: 100vh;
   display: flex;
-  justify-content: center;
   align-items: center;
 
   .auth-users-background {
@@ -24,10 +23,15 @@
 
   .custom-space-content-auth {
     display: flex;
-    width: 60%;
-    margin: auto;
+    width: 30%;
+    margin-left: 15%;
     background-color: aliceblue;
     border-radius: 8px;
+    box-shadow: 0 0 5px gray;
     z-index: 2;
+    overflow: hidden;
   }
 }
+
+// menores a 768 que el .custom-space-content-auth ocupe el 80%
+@media screen {}
