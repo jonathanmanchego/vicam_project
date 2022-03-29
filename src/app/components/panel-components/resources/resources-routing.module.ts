@@ -1,9 +1,14 @@
+import { ResourcesGeneralComponent } from './resources-general/resources-general.component';
 import { BankCreateComponent } from './banks/bank-create/bank-create.component';
 import { BankListComponent } from './banks/bank-list/bank-list.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
+  {
+    path: '',
+    component: ResourcesGeneralComponent,
+  },
   {
     path: 'bancos/list',
     component: BankListComponent,

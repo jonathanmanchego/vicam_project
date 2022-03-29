@@ -1,7 +1,9 @@
-import { Bank } from "./bank";
+import { Bank } from './bank';
 
 export interface CreditCard {
-  accountNumber: string,
-  facturationDate: number,
-  bank: Bank
+  accountNumber: string;
+  facturationDate: number;
+  bank: Bank;
+  amount: number;
+  dueDate: number;
 }

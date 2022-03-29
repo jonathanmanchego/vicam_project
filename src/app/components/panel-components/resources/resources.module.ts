@@ -12,9 +12,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSelectModule } from '@angular/material/select';
+import { ResourcesGeneralComponent } from './resources-general/resources-general.component';
 
 @NgModule({
-  declarations: [BankCreateComponent, BankListComponent],
+  declarations: [BankCreateComponent, BankListComponent, ResourcesGeneralComponent],
   imports: [
     CommonModule,
     ResourcesRoutingModule,

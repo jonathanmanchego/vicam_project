@@ -1,5 +1,10 @@
 <mat-drawer-container class="example-container" autosize>
-  <mat-drawer #drawer mode="over" [opened]="isOpenSidenav">
+  <mat-drawer
+    #drawer
+    mode="side"
+    [disableClose]="true"
+    [opened]="isOpenSidenav"
+  >
     <div class="logo-sidenav">
       <img
         class="logo-sidenav-img"
@@ -18,6 +23,7 @@
             <mat-icon matTooltip="Clientes" matTooltipPosition="right"
               >account_circle</mat-icon
             >
+            <small>Clientes</small>
           </div>
         </mat-list-item>
         <mat-list-item
@@ -26,9 +32,22 @@
           (click)="goToRoute('/resources/bancos/list')"
         >
           <div class="list-item-content">
-            <mat-icon matTooltip="Bancos" matTooltipPosition="right"
+            <mat-icon matTooltip="Datos generales" matTooltipPosition="right"
               >account_balance</mat-icon
             >
+            <small>Datos Generales</small>
+          </div>
+        </mat-list-item>
+        <mat-list-item
+          class="mat-list-item-menu"
+          role="button"
+          (click)="goToRoute('/resources/bancos/list')"
+        >
+          <div class="list-item-content">
+            <mat-icon matTooltip="Datos generales" matTooltipPosition="right"
+              >account_balance</mat-icon
+            >
+            <small>Reportes</small>
           </div>
         </mat-list-item>
       </mat-list>
@@ -36,6 +55,8 @@
   </mat-drawer>
   <div class="sidenav-content">
     <app-toolbar-panel (toggleMenu)="toggleMenu()"></app-toolbar-panel>
-    <router-outlet></router-outlet>
+    <div class="panel-principal">
+      <router-outlet></router-outlet>
+    </div>
   </div>
 </mat-drawer-container>

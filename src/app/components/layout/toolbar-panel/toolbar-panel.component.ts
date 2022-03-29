@@ -1,4 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { AuthenticationService } from 'src/app/services/auth/authentication.service';
 import { SidenavService } from 'src/app/services/layout/sidenav.service';
 
 @Component({
@@ -8,11 +9,17 @@ import { SidenavService } from 'src/app/services/layout/sidenav.service';
 })
 export class ToolbarPanelComponent implements OnInit {
   @Output() toggleMenu = new EventEmitter<boolean>();
-  constructor(private readonly sidenavService: SidenavService) {}
+  constructor(
+    private readonly sidenavService: SidenavService,
+    private readonly authenticationService: AuthenticationService
+  ) {}
 
   ngOnInit(): void {}
 
   menuOpenOrClose(): void {
     this.toggleMenu.emit(true);
+  }
+  logout(): void {
+    this.authenticationService.logout();
   }
 }

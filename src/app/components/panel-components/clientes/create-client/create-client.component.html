@@ -1,20 +1,24 @@
-<div class="row">
+<div class="page-component">
   <div class="col-12 text-center">
     <h1>Registrar nuevo cliente</h1>
   </div>
-  <div class="col-sm-12 col-md-10 col-lg-8 mx-auto">
+  <div class="w-100 mx-auto">
     <form [formGroup]="formCreateClient" (ngSubmit)="saveNewClient()">
-      <div class="row">
-        <mat-form-field appearance="outline">
+      <div class="row-fields">
+        <mat-form-field
+          appearance="outline"
+          class="col-lg-3 col-12 col-sm-6 col-md-4"
+        >
           <mat-label>Nombre:</mat-label>
           <input matInput formControlName="firstName" autocomplete="name" />
           <mat-error *ngIf="validateFormControl('firstName')"
             >{{ validateFormControl('firstName') }}
           </mat-error>
         </mat-form-field>
-      </div>
-      <div class="row">
-        <mat-form-field appearance="outline">
+        <mat-form-field
+          appearance="outline"
+          class="col-lg-3 col-12 col-sm-6 col-md-4"
+        >
           <mat-label>Apellidos:</mat-label>
           <input
             matInput
@@ -25,9 +29,10 @@
             >{{ validateFormControl('firstName') }}
           </mat-error>
         </mat-form-field>
-      </div>
-      <div class="row">
-        <mat-form-field appearance="outline">
+        <mat-form-field
+          appearance="outline"
+          class="col-lg-3 col-12 col-sm-6 col-md-4"
+        >
           <mat-label>DNI:</mat-label>
           <input
             matInput
@@ -39,9 +44,10 @@
             >{{ validateFormControl('documentNumber') }}
           </mat-error>
         </mat-form-field>
-      </div>
-      <div class="row">
-        <mat-form-field appearance="outline">
+        <mat-form-field
+          appearance="outline"
+          class="col-lg-3 col-12 col-sm-6 col-md-4"
+        >
           <mat-label>N° de celular:</mat-label>
           <input
             matInput
@@ -54,9 +60,12 @@
           </mat-error>
         </mat-form-field>
       </div>
-      <div class="row">
-        <mat-form-field appearance="outline" class="col-4">
-          <mat-label>Nombre de Banco:</mat-label>
+      <div class="row-fields">
+        <mat-form-field
+          appearance="outline"
+          class="col-lg-3 col-12 col-sm-6 col-md-4"
+        >
+          <mat-label>Banco:</mat-label>
           <mat-select formControlName="bank">
             <mat-option *ngFor="let bank of banks" [value]="bank.id">
               {{ bank.name }}
@@ -66,7 +75,10 @@
             >{{ validateFormControl('bank') }}
           </mat-error>
         </mat-form-field>
-        <mat-form-field appearance="outline" class="col-8">
+        <mat-form-field
+          appearance="outline"
+          class="col-lg-6 col-12 col-sm-6 col-md-8"
+        >
           <mat-label>N° de cuenta de ahorros:</mat-label>
           <input
             matInput
@@ -78,8 +90,28 @@
             >{{ validateFormControl('accountNumber') }}
           </mat-error>
         </mat-form-field>
+        <mat-form-field
+          appearance="outline"
+          class="col-lg-3 col-12 col-sm-6 col-md-4"
+        >
+          <mat-label>Duración del contrato:</mat-label>
+          <mat-select formControlName="duration">
+            <mat-option value="2">
+              2
+            </mat-option>
+            <mat-option value="4">
+              4
+            </mat-option>
+            <mat-option value="6">
+              6
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="validateFormControl('bank')"
+            >{{ validateFormControl('bank') }}
+          </mat-error>
+        </mat-form-field>
       </div>
-      <div class="row-credit-card">
+      <div class="w-100-credit-card">
         <mat-slide-toggle
           (change)="initCreditCards()"
           formControlName="isCreditCard"
@@ -93,7 +125,7 @@
         >
           <div class="col-grid">
             <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Nombre de Banco:</mat-label>
+              <mat-label>Banco:</mat-label>
               <mat-select
                 (selectionChange)="setFacturationDate($event, creditCard)"
               >
@@ -103,20 +135,7 @@
               </mat-select>
             </mat-form-field>
           </div>
-          <div class="col-grid">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Fecha de facturacion:</mat-label>
-              <input
-                matInput
-                type="text"
-                autocomplete="off"
-                [(ngModel)]="creditCard.facturationDate"
-                [ngModelOptions]="{ standalone: true }"
-              />
-            </mat-form-field>
-          </div>
-
-          <div class="col-grid double-cols">
+          <div class="col-grid" style="grid-column: 2 / span 2">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>N° de cuenta:</mat-label>
               <input
@@ -128,15 +147,77 @@
               />
             </mat-form-field>
           </div>
+          <div class="col-grid">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Monto:</mat-label>
+              <input
+                matInput
+                type="number"
+                [(ngModel)]="creditCard.amount"
+                [ngModelOptions]="{ standalone: true }"
+              />
+            </mat-form-field>
+          </div>
+          <div class="col-grid">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Día de facturacion:</mat-label>
+              <input
+                matInput
+                type="number"
+                autocomplete="off"
+                [(ngModel)]="creditCard.facturationDate"
+                [ngModelOptions]="{ standalone: true }"
+              />
+            </mat-form-field>
+          </div>
+          <div class="col-grid">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Día de vencimiento:</mat-label>
+              <input
+                matInput
+                type="number"
+                autocomplete="off"
+                [(ngModel)]="creditCard.dueDate"
+                [ngModelOptions]="{ standalone: true }"
+              />
+            </mat-form-field>
+          </div>
+          <div class="col-grid">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Cuotas:</mat-label>
+              <input
+                matInput
+                type="number"
+                autocomplete="off"
+                [(ngModel)]="creditCard.dueDate"
+                [ngModelOptions]="{ standalone: true }"
+              />
+            </mat-form-field>
+          </div>
+          <div class="col-grid">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Monto de cuotas:</mat-label>
+              <input
+                matInput
+                type="number"
+                autocomplete="off"
+                [(ngModel)]="creditCard.dueDate"
+                [ngModelOptions]="{ standalone: true }"
+              />
+            </mat-form-field>
+          </div>
         </div>
-        <div class="row">
+        <div class="w-100">
           <a (click)="addCreditCard()" class="text-button"
             >Añadir tarjetas de crédito</a
           >
         </div>
       </ng-container>
-      <div class="row">
-        <mat-form-field appearance="outline">
+      <div class="row-fields">
+        <mat-form-field
+          appearance="outline"
+          class="col-lg-6 col-sm-12 col-md-6"
+        >
           <mat-label>Correo electrónico:</mat-label>
           <input
             matInput
@@ -148,9 +229,10 @@
             >{{ validateFormControl('email') }}
           </mat-error>
         </mat-form-field>
-      </div>
-      <div class="row">
-        <mat-form-field appearance="outline">
+        <mat-form-field
+          appearance="outline"
+          class="col-lg-6 col-sm-12 col-md-6"
+        >
           <mat-label>Dirección:</mat-label>
           <input matInput formControlName="address" autocomplete="off" />
           <mat-error *ngIf="validateFormControl('address')"
@@ -158,7 +240,7 @@
           </mat-error>
         </mat-form-field>
       </div>
-      <div class="row">
+      <div class="w-100">
         <button
           mat-raised-button
           type="submit"

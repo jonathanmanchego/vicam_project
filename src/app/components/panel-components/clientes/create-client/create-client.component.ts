@@ -33,6 +33,7 @@ export class CreateClientComponent implements OnInit {
     email: new FormControl('', [Validators.required, Validators.email]),
     address: new FormControl('', Validators.required),
     isCreditCard: new FormControl(false),
+    duration: new FormControl(2),
   });
   creditCards: CreditCard[] = [];
   banks: Bank[] = [];
@@ -55,11 +56,13 @@ export class CreateClientComponent implements OnInit {
         {
           accountNumber: '',
           facturationDate: 1,
+          dueDate: 1,
           bank: {
             id: 0,
             facturationDate: 1,
             name: '',
           },
+          amount: 0.0,
         },
       ];
     } else {
@@ -70,11 +73,13 @@ export class CreateClientComponent implements OnInit {
     this.creditCards.push({
       accountNumber: '',
       facturationDate: 2,
+      dueDate: 1,
       bank: {
         id: 0,
         facturationDate: 1,
         name: '',
       },
+      amount: 0.0,
     });
   }
   isCreditCard(): boolean {
@@ -125,9 +130,11 @@ export class CreateClientComponent implements OnInit {
       bank,
     } = this.formCreateClient.value;
     const creditCards: CreditCard[] = this.creditCards.map((item) => ({
+      dueDate: item.dueDate,
       accountNumber: item.accountNumber,
       facturationDate: Number(item.facturationDate),
       bank: item.bank,
+      amount: item.amount,
     }));
     const bankSelected = this.banks.filter((item) => item.id === +bank)[0];
     const newClient: Client = {

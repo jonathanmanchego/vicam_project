@@ -18,6 +18,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { AngularFireModule } from '@angular/fire/compat';
 import { LayoutModule } from './components/layout/layout.module';
 import { PageComponentModule } from './page-component/page-component.module';
+import { NgChartsModule } from 'ng2-charts';
 
 const MaterialModules = [
   MatSidenavModule,
@@ -42,6 +43,7 @@ const MaterialModules = [
     PageComponentModule,
     LayoutModule,
     PanelComponentsModule,
+    NgChartsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
