@@ -8,7 +8,7 @@
     Nuevo cliente
   </button>
 </div>
-<div class="w-100 mt-3">
+<div class="page-component w-100 mt-3">
   <div class="list">
     <div class="table-custom-grid">
       <div class="head-custom-grid">
@@ -29,6 +29,9 @@
         </div>
         <div class="col-head-custom-grid">
           <span>Dirección</span>
+        </div>
+        <div class="col-head-custom-grid">
+          <span>Acciones</span>
         </div>
       </div>
       <div class="body-custom-grid">
@@ -54,6 +57,17 @@
                 <div class="col-body-custom-grid">
                   <span [innerText]="client.address"></span>
                 </div>
+                <div class="col-body-custom-grid">
+                  <button mat-icon-button [matMenuTriggerFor]="menu">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item>
+                      <mat-icon>post_add</mat-icon>
+                      Generar reporte
+                    </button>
+                  </mat-menu>
+                </div>
               </div>
             </mat-expansion-panel-header>
             <div class="body-row-custom-grid">
@@ -71,7 +85,9 @@
                 <span [innerText]="client.accountNumber"></span>
               </div>
             </div>
-            <ng-container *ngIf="client.creditCards.length > 0">
+            <ng-container
+              *ngIf="client.creditCards && client.creditCards.length > 0"
+            >
               <div class="body-row-custom-grid">
                 <div class="col-body-custom-grid">
                   <span>Tarjetas de credito:</span>

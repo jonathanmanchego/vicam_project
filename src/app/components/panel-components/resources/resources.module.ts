@@ -13,9 +13,14 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSelectModule } from '@angular/material/select';
 import { ResourcesGeneralComponent } from './resources-general/resources-general.component';
+import { EstadoSolicitudesComponent } from './estado-solicitudes/estado-solicitudes.component';
+import { EstadoPagosComponent } from './estado-pagos/estado-pagos.component';
+import { PlazosPagosComponent } from './plazos-pagos/plazos-pagos.component';
+import { RolesComponent } from './roles/roles.component';
+import { UsuariosComponent } from './usuarios/usuarios.component';
 
 @NgModule({
-  declarations: [BankCreateComponent, BankListComponent, ResourcesGeneralComponent],
+  declarations: [BankCreateComponent, BankListComponent, ResourcesGeneralComponent, EstadoSolicitudesComponent, EstadoPagosComponent, PlazosPagosComponent, RolesComponent, UsuariosComponent],
   imports: [
     CommonModule,
     ResourcesRoutingModule,

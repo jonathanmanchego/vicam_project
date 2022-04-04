@@ -1,32 +1,27 @@
-<div class="row py-3">
-  <button
-    class="col-auto"
-    mat-raised-button
-    color="primary"
-    [routerLink]="['/resources/bancos/create']"
-  >
-    Nuevo Banco
-  </button>
-</div>
-<div class="row">
-  <div class="list">
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Nombre</th>
-          <th>Día de facturación</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let bank of banksObservable | async">
-          <td scope="row">
-            <span [innerText]="bank.name"></span>
-          </td>
-          <td>
-            <span [innerText]="bank.facturationDate"></span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+<div class="home">
+  <div class="col-12 col-sm-6 col-lg-4">
+    <div class="w-100 page-component">
+      <table class="table-custom-vicam">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Día de facturación</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let bank of banksObservable | async">
+            <td scope="row">
+              <span [innerText]="bank.name"></span>
+            </td>
+            <td>
+              <span [innerText]="bank.facturationDate"></span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="col-12 col-sm-6 col-lg-4">
+    <app-bank-create></app-bank-create>
   </div>
 </div>

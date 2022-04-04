@@ -33,6 +33,7 @@ export class CreateClientComponent implements OnInit {
     email: new FormControl('', [Validators.required, Validators.email]),
     address: new FormControl('', Validators.required),
     isCreditCard: new FormControl(false),
+    interes: new FormControl(0, Validators.required),
     duration: new FormControl(2),
   });
   creditCards: CreditCard[] = [];

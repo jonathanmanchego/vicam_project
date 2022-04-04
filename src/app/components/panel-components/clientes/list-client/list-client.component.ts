@@ -19,11 +19,6 @@ export class ListClientComponent implements OnInit {
     this.clientsStateService.items.subscribe((res: Array<Client>) => {
       this.clients = res;
     });
-    /* this.clientsStateService.observableList().subscribe(
-      () => {
-        this.setAvgAges();
-      }
-    ) */
   }
   setAvgAges(): void {
     let avg = 0;

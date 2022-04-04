@@ -1,0 +1,42 @@
+.table-custom-vicam {
+  width: 100%;
+
+  thead {
+    width: 100%;
+
+    tr {
+      width: 100%;
+
+      th {
+        background-color: #3f51b5;
+        color: white;
+
+        &:nth-child(1) {
+          border-radius: 12px 0 0 0;
+        }
+
+        &:last-child {
+          border-radius: 0 12px 0 0;
+        }
+      }
+    }
+  }
+
+  tbody {
+    width: 100%;
+
+    tr {
+      width: 100%;
+      border-bottom: 1px solid gray;
+
+      &:nth-child(odd) {
+        background-color: rgb(235, 235, 235);
+      }
+    }
+  }
+}
+
+.table-custom-vicam tr th,
+.table-custom-vicam tr td {
+  padding: .5rem 1rem;
+}

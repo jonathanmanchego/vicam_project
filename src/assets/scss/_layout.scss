@@ -9,3 +9,10 @@ app-toolbar-panel {
   border-radius: 12px;
   box-shadow: 0 0 8px rgb(197, 197, 197);
 }
+
+.home {
+  display: flex;
+  gap: 1rem;
+  padding-top: 1rem;
+  width: 100%;
+}

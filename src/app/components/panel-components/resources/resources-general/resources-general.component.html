@@ -1,1 +1,63 @@
-<p>resources-general works!</p>
+<div class="grid-list-pages">
+  <div class="card" (click)="navigateTo('/bancos')">
+    <div class="content-card-page">
+      <div class="icon-card-page">
+        <mat-icon matTooltip="Bancos" matTooltipPosition="right"
+          >account_balance</mat-icon
+        >
+      </div>
+      <div class="title-card-page">
+        <span class="title-card">Bancos</span>
+      </div>
+    </div>
+  </div>
+  <div class="card" (click)="navigateTo('/estados-solicitud')">
+    <div class="content-card-page">
+      <div class="icon-card-page">
+        <mat-icon matTooltip="Estados de solicitudes" matTooltipPosition="right"
+          >schedule</mat-icon
+        >
+      </div>
+      <div class="title-card-page">
+        <span class="title-card">Estados de solicitudes</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" (click)="navigateTo('/estados-pago')">
+    <div class="content-card-page">
+      <div class="icon-card-page">
+        <mat-icon matTooltip="Estado de pagos" matTooltipPosition="right"
+          >schedule</mat-icon
+        >
+      </div>
+      <div class="title-card-page">
+        <span class="title-card">Estados pagos</span>
+      </div>
+    </div>
+  </div>
+  <div class="card" (click)="navigateTo('/plazos-pago')">
+    <div class="content-card-page">
+      <div class="icon-card-page">
+        <mat-icon matTooltip="Plazos de pagos" matTooltipPosition="right"
+          >account_balance</mat-icon
+        >
+      </div>
+      <div class="title-card-page">
+        <span class="title-card">Plazos de pagos</span>
+      </div>
+    </div>
+  </div>
+  <div class="card" (click)="navigateTo('/roles')">
+    <div class="content-card-page">
+      <div class="icon-card-page">
+        <mat-icon matTooltip="Roles" matTooltipPosition="right"
+          >account_balance</mat-icon
+        >
+      </div>
+      <div class="title-card-page">
+        <span class="title-card">Roles</span>
+      </div>
+    </div>
+  </div>
+</div>

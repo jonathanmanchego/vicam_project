@@ -1,0 +1,63 @@
+<div class="home">
+  <div class="col-12 col-sm-6 col-lg-4">
+    <div class="w-100 page-component">
+      <table class="table-custom-vicam">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Día de facturación</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let bank of banksObservable | async">
+            <td scope="row">
+              <span [innerText]="bank.name"></span>
+            </td>
+            <td>
+              <span [innerText]="bank.facturationDate"></span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="col-12 col-sm-6 col-lg-4">
+    <div class="page-component">
+      <div class="col-12 text-center">
+        <h1>Registrar nuevo banco</h1>
+      </div>
+      <div class="col-sm-12 col-md-10 col-lg-8 mx-auto">
+        <form [formGroup]="formCreate" (ngSubmit)="save()">
+          <div class="row">
+            <mat-form-field appearance="outline">
+              <mat-label>Nombre:</mat-label>
+              <input matInput formControlName="name" />
+              <mat-error *ngIf="validateFormControl('name')"
+                >{{ validateFormControl('name') }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="row">
+            <mat-form-field appearance="outline">
+              <mat-label>Día de facturación:</mat-label>
+              <input matInput formControlName="facturationDate" />
+              <mat-error *ngIf="validateFormControl('facturationDate')"
+                >{{ validateFormControl('facturationDate') }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="row">
+            <button
+              mat-raised-button
+              type="submit"
+              color="primary"
+              class="col-auto"
+            >
+              Registrar banco
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
