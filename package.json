@@ -10,6 +10,10 @@
     "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix"
   },
   "private": true,
+  "engines": {
+    "node": "16.14.2",
+    "npm": "8.5.5"
+  },
   "dependencies": {
     "@angular/animations": "~13.1.0",
     "@angular/cdk": "^13.2.1",
