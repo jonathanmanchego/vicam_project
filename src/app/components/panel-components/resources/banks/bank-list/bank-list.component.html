@@ -4,17 +4,17 @@
       <table class="table-custom-vicam">
         <thead>
           <tr>
-            <th>Nombre</th>
-            <th>Día de facturación</th>
+            <th>N°</th>
+            <th>Banco</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let bank of banksObservable | async">
-            <td scope="row">
-              <span [innerText]="bank.name"></span>
-            </td>
+          <tr *ngFor="let banco of bancos;index as i">
             <td>
-              <span [innerText]="bank.facturationDate"></span>
+              <span [innerText]="i+1"></span>
+            </td>
+            <td scope="row">
+              <span [innerText]="banco.banco_name"></span>
             </td>
           </tr>
         </tbody>

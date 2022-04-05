@@ -21,6 +21,7 @@ import { AngularFireModule } from '@angular/fire/compat';
 import { LayoutModule } from './components/layout/layout.module';
 import { PageComponentModule } from './page-component/page-component.module';
 import { NgChartsModule } from 'ng2-charts';
+import { HttpClientModule } from '@angular/common/http';
 
 const MaterialModules = [
   MatSidenavModule,
@@ -48,6 +49,7 @@ const MaterialModules = [
     LayoutModule,
     PanelComponentsModule,
     NgChartsModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

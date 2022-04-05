@@ -1,5 +1,6 @@
 import { ModelInterface } from "./model-interface";
 
-export interface BankInterface extends ModelInterface {
-  name: string;
+export interface BankInterface {
+  banco_id: number;
+  banco_name: string;
 }

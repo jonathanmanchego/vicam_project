@@ -9,7 +9,7 @@ import { StateApiService } from './state-api.service';
 export class BankApiService extends StateApiService<BankInterface> {
   constructor() {
     super();
-    this.url = '/api/v1/bank';
+    this.url = '/api/bancos';
     this.http = inject(HttpClient)
   }
 }

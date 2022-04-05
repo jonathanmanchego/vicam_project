@@ -1,6 +1,6 @@
-import { Observable } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
-import { BanksStateService } from 'src/app/services/state/banks-state.service';
+import { BankInterface } from 'src/app/commons/state/interfaces/bank-interface';
+import { BankApiService } from 'src/app/services/api/bank-api.service';
 
 @Component({
   selector: 'app-bank-list',
@@ -8,10 +8,22 @@ import { BanksStateService } from 'src/app/services/state/banks-state.service';
   styleUrls: ['./bank-list.component.scss'],
 })
 export class BankListComponent implements OnInit {
-  banksObservable: Observable<Array<any>> = new Observable<Array<any>>();
-  constructor(private readonly banksStateService: BanksStateService) {}
+  bancos: BankInterface[] = [];
+  loading = false;
+  constructor(private readonly bankApiService: BankApiService) {}
 
   ngOnInit(): void {
-    this.banksObservable = this.banksStateService.items;
+    if (this.bankApiService.getValues().length === 0) {
+      this.loading = true;
+      this.bankApiService.getAll().subscribe(
+        (bancos: BankInterface[]) => {
+          this.bancos = bancos;
+          this.loading = false;
+        },
+        () => {
+          this.loading = false;
+        }
+      );
+    }
   }
 }
