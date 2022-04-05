@@ -13,7 +13,7 @@ export const environment = {
     messagingSenderId: "827159020420",
     appId: "1:827159020420:web:d310507c14075e83e5d3d1"
   },
-  backend: "http://localhost:3000"
+  backend: "https://vicam.herokuapp.com"
 };
 
 /*
