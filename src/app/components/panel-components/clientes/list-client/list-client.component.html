@@ -36,26 +36,26 @@
       </div>
       <div class="body-custom-grid">
         <mat-accordion class="accordion-body">
-          <mat-expansion-panel *ngFor="let client of clients">
+          <mat-expansion-panel *ngFor="let prestamista of clients">
             <mat-expansion-panel-header>
               <div class="body-row-custom-grid">
                 <div class="col-body-custom-grid">
-                  <span [innerText]="client.firstName"></span>
+                  <span [innerText]="prestamista.prestamista_nombres"></span>
                 </div>
                 <div class="col-body-custom-grid">
-                  <span [innerText]="client.lastName"></span>
+                  <span [innerText]="prestamista.prestamista_apellidos"></span>
                 </div>
                 <div class="col-body-custom-grid">
-                  <span [innerText]="client.documentNumber"></span>
+                  <span [innerText]="prestamista.prestamista_dni"></span>
                 </div>
                 <div class="col-body-custom-grid">
-                  <span [innerText]="client.phoneNumber"></span>
+                  <span [innerText]="prestamista.prestamista_celular1"></span>
                 </div>
                 <div class="col-body-custom-grid">
-                  <span [innerText]="client.email"></span>
+                  <span [innerText]="prestamista.prestamista_correo"></span>
                 </div>
                 <div class="col-body-custom-grid">
-                  <span [innerText]="client.address"></span>
+                  <span [innerText]="prestamista.prestamista_direccion"></span>
                 </div>
                 <div class="col-body-custom-grid">
                   <button mat-icon-button [matMenuTriggerFor]="menu">
@@ -70,23 +70,27 @@
                 </div>
               </div>
             </mat-expansion-panel-header>
-            <div class="body-row-custom-grid">
+            <div class="body-row-custom-grid" *ngIf="prestamista.cuenta_ahorro">
               <div class="col-body-custom-grid">
                 <span>Cuenta de ahorros:</span>
               </div>
             </div>
-            <div class="body-row-custom-grid">
+            <div class="body-row-custom-grid" *ngIf="prestamista.cuenta_ahorro">
               <div class="col-body-custom-grid"></div>
               <div class="col-body-custom-grid"></div>
               <div class="col-body-custom-grid">
-                <span [innerText]="client.bank.name"></span>
+                <span
+                  [innerText]="prestamista.cuenta_ahorro?.banco?.banco_name"
+                ></span>
               </div>
               <div class="col-body-custom-grid">
-                <span [innerText]="client.accountNumber"></span>
+                <span [innerText]="prestamista.cuenta_ahorro.cuenta_numero"></span>
               </div>
             </div>
-            <ng-container
-              *ngIf="client.creditCards && client.creditCards.length > 0"
+            <!-- <ng-container
+              *ngIf="
+                prestamista.creditCards && prestamista.creditCards.length > 0
+              "
             >
               <div class="body-row-custom-grid">
                 <div class="col-body-custom-grid">
@@ -95,7 +99,7 @@
               </div>
               <div
                 class="body-row-custom-grid"
-                *ngFor="let creditCard of client.creditCards"
+                *ngFor="let creditCard of prestamista.creditCards"
               >
                 <div class="col-body-custom-grid"></div>
                 <div class="col-body-custom-grid"></div>
@@ -109,7 +113,7 @@
                   <span [innerText]="creditCard.accountNumber"></span>
                 </div>
               </div>
-            </ng-container>
+            </ng-container> -->
           </mat-expansion-panel>
         </mat-accordion>
       </div>

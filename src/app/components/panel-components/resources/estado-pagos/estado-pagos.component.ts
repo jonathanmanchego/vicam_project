@@ -2,6 +2,8 @@ import Swal from 'sweetalert2';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
+import { EstadoPagoInterface } from 'src/app/commons/state/interfaces/estado-pago-interface';
+import { EstadoPagoApiService } from 'src/app/services/api/estado-pago-api.service';
 
 @Component({
   selector: 'app-estado-pagos',
@@ -11,13 +13,31 @@ import { Observable } from 'rxjs';
 export class EstadoPagosComponent implements OnInit {
   formCreate: FormGroup = new FormGroup({
     name: new FormControl('', Validators.required),
-    facturationDate: new FormControl(1, Validators.required),
+    descripcion: new FormControl('', Validators.required),
   });
-  banksObservable: Observable<Array<any>> = new Observable<Array<any>>();
-  constructor() {}
+  loading = false;
+  estadoPagos: EstadoPagoInterface[] = [];
+  constructor(private readonly estadoPagoApiService: EstadoPagoApiService) {}
 
   ngOnInit(): void {
     this.formCreate.reset();
+    this.initTable();
+  }
+  initTable(): void {
+    if (this.estadoPagoApiService.getValues().length > 0) {
+      this.estadoPagos = this.estadoPagoApiService.getValues();
+    } else {
+      this.loading = true;
+      this.estadoPagoApiService.getAll().subscribe(
+        () => {
+          this.estadoPagos = this.estadoPagoApiService.getValues();
+          this.loading = false;
+        },
+        () => {
+          this.loading = false;
+        }
+      );
+    }
   }
   validateFormControl(field: string): string {
     const formControl = this.formCreate.get(field);
@@ -43,28 +63,30 @@ export class EstadoPagosComponent implements OnInit {
       });
       return;
     }
-    const { name, facturationDate } = this.formCreate.value;
-    const bankToCreate = {
+    const { name, descripcion } = this.formCreate.value;
+    const estadoPagoToCreate = {
       id: 0,
-      name,
-      facturationDate: +facturationDate,
+      ep_estado: name,
+      ep_descripcion: descripcion,
     };
-    /* this.banksStateService.create(bankToCreate).subscribe({
+    this.loading = true;
+    this.estadoPagoApiService.create(estadoPagoToCreate).subscribe({
       next: () => {
+        this.loading = false;
         Swal.fire({
           title: 'Correcto',
           text: 'Se pudo guardar correctamente',
           icon: 'success',
         });
-        this.route.navigateByUrl('/resources/bancos/list');
       },
       error: () => {
+        this.loading = false;
         Swal.fire({
           title: '¡Atención!',
           text: 'No se pudo guardar correctamente',
           icon: 'info',
         });
       },
-    }); */
+    });
   }
 }

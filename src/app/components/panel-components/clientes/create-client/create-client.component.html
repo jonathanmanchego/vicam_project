@@ -67,8 +67,8 @@
         >
           <mat-label>Banco:</mat-label>
           <mat-select formControlName="bank">
-            <mat-option *ngFor="let bank of banks" [value]="bank.id">
-              {{ bank.name }}
+            <mat-option *ngFor="let bank of banks" [value]="bank.banco_id">
+              {{ bank.banco_name }}
             </mat-option>
           </mat-select>
           <mat-error *ngIf="validateFormControl('bank')"
@@ -96,9 +96,12 @@
         >
           <mat-label>Duración del contrato:</mat-label>
           <mat-select formControlName="duration">
-            <mat-option value="2"> 2 </mat-option>
-            <mat-option value="4"> 4 </mat-option>
-            <mat-option value="6"> 6 </mat-option>
+            <mat-option
+              *ngFor="let plazo of plazos"
+              [value]="plazo.plazo_pago_id"
+            >
+              {{ plazo.plazo_pago_meses }}
+            </mat-option>
           </mat-select>
           <mat-error *ngIf="validateFormControl('bank')"
             >{{ validateFormControl('bank') }}
@@ -122,6 +125,33 @@
           </mat-error>
         </mat-form-field>
       </div>
+      <div class="row-fields">
+        <mat-form-field
+          appearance="outline"
+          class="col-lg-6 col-sm-12 col-md-6"
+        >
+          <mat-label>Correo electrónico:</mat-label>
+          <input
+            matInput
+            formControlName="email"
+            type="email"
+            autocomplete="off"
+          />
+          <mat-error *ngIf="validateFormControl('email')"
+            >{{ validateFormControl('email') }}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field
+          appearance="outline"
+          class="col-lg-6 col-sm-12 col-md-6"
+        >
+          <mat-label>Dirección:</mat-label>
+          <input matInput formControlName="address" autocomplete="off" />
+          <mat-error *ngIf="validateFormControl('address')"
+            >{{ validateFormControl('address') }}
+          </mat-error>
+        </mat-form-field>
+      </div>
       <div class="w-100-credit-card">
         <mat-slide-toggle
           (change)="initCreditCards()"
@@ -140,8 +170,8 @@
               <mat-select
                 (selectionChange)="setFacturationDate($event, creditCard)"
               >
-                <mat-option *ngFor="let bank of banks" [value]="bank.id">
-                  {{ bank.name }}
+                <mat-option *ngFor="let bank of banks" [value]="bank.banco_id">
+                  {{ bank.banco_name }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
@@ -224,33 +254,6 @@
           >
         </div>
       </ng-container>
-      <div class="row-fields">
-        <mat-form-field
-          appearance="outline"
-          class="col-lg-6 col-sm-12 col-md-6"
-        >
-          <mat-label>Correo electrónico:</mat-label>
-          <input
-            matInput
-            formControlName="email"
-            type="email"
-            autocomplete="off"
-          />
-          <mat-error *ngIf="validateFormControl('email')"
-            >{{ validateFormControl('email') }}
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field
-          appearance="outline"
-          class="col-lg-6 col-sm-12 col-md-6"
-        >
-          <mat-label>Dirección:</mat-label>
-          <input matInput formControlName="address" autocomplete="off" />
-          <mat-error *ngIf="validateFormControl('address')"
-            >{{ validateFormControl('address') }}
-          </mat-error>
-        </mat-form-field>
-      </div>
       <div class="w-100">
         <button
           mat-raised-button

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
+import { PlazosPagoInterface } from 'src/app/commons/state/interfaces/plazos-pago-interface';
+import { PlazosPagosApiService } from 'src/app/services/api/plazos-pagos-api.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -10,14 +12,33 @@ import Swal from 'sweetalert2';
 })
 export class PlazosPagosComponent implements OnInit {
   formCreate: FormGroup = new FormGroup({
-    name: new FormControl('', Validators.required),
-    facturationDate: new FormControl(1, Validators.required),
+    anios: new FormControl(1, Validators.required),
+    meses: new FormControl(1, Validators.required),
+    tasaInteres: new FormControl(1, Validators.required),
   });
-  banksObservable: Observable<Array<any>> = new Observable<Array<any>>();
-  constructor() {}
+  loading = false;
+  plazosPago: PlazosPagoInterface[] = [];
+  constructor(private readonly plazosPagosApiService: PlazosPagosApiService) {}
 
   ngOnInit(): void {
     this.formCreate.reset();
+    this.initTable();
+  }
+  initTable(): void {
+    if (this.plazosPagosApiService.getValues().length > 0) {
+      this.plazosPago = this.plazosPagosApiService.getValues();
+    } else {
+      this.loading = true;
+      this.plazosPagosApiService.getAll().subscribe(
+        () => {
+          this.plazosPago = this.plazosPagosApiService.getValues();
+          this.loading = false;
+        },
+        () => {
+          this.loading = false;
+        }
+      );
+    }
   }
   validateFormControl(field: string): string {
     const formControl = this.formCreate.get(field);
@@ -43,28 +64,31 @@ export class PlazosPagosComponent implements OnInit {
       });
       return;
     }
-    const { name, facturationDate } = this.formCreate.value;
-    const bankToCreate = {
-      id: 0,
-      name,
-      facturationDate: +facturationDate,
+    const { anios, meses, tasaInteres } = this.formCreate.value;
+    const plazosPago: PlazosPagoInterface = {
+      plazo_pago_id: 0,
+      plazo_pago_anios: anios,
+      plazo_pago_meses: meses,
+      plazo_pago_tasa_interes: tasaInteres,
     };
-    /* this.banksStateService.create(bankToCreate).subscribe({
+    this.loading = true;
+    this.plazosPagosApiService.create(plazosPago).subscribe({
       next: () => {
+        this.loading = false;
         Swal.fire({
           title: 'Correcto',
           text: 'Se pudo guardar correctamente',
           icon: 'success',
         });
-        this.route.navigateByUrl('/resources/bancos/list');
       },
       error: () => {
+        this.loading = false;
         Swal.fire({
           title: '¡Atención!',
           text: 'No se pudo guardar correctamente',
           icon: 'info',
         });
       },
-    }); */
+    });
   }
 }

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Client } from 'src/app/commons/models/client';
+import { PrestamistaInterface } from 'src/app/commons/state/interfaces/prestamista-interface';
+import { PrestamistaApiService } from 'src/app/services/api/prestamista-api.service';
 import { ClientstStateService } from 'src/app/services/state/clients-state.service';
 
 @Component({
@@ -12,13 +14,15 @@ export class ListClientComponent implements OnInit {
   clientsObservable: Observable<Array<any>> = new Observable<Array<any>>();
   avgAges = 0;
   devStandar = 0;
-  clients: Array<Client> = [];
-  constructor(private readonly clientsStateService: ClientstStateService) {}
+  clients: Array<PrestamistaInterface> = [];
+  constructor(private readonly prestamistaApiService: PrestamistaApiService) {}
 
   ngOnInit(): void {
-    this.clientsStateService.items.subscribe((res: Array<Client>) => {
-      this.clients = res;
-    });
+    this.prestamistaApiService
+      .getAll()
+      .subscribe((res: Array<PrestamistaInterface>) => {
+        this.clients = res;
+      });
   }
   setAvgAges(): void {
     let avg = 0;

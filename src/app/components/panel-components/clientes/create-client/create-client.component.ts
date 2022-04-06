@@ -1,3 +1,5 @@
+import { UsuarioInterface } from './../../../../commons/state/interfaces/usuario-interface';
+import { PlazosPagoInterface } from './../../../../commons/state/interfaces/plazos-pago-interface';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -8,7 +10,18 @@ import { CreditCard } from 'src/app/commons/models/credit-card';
 import { Bank } from 'src/app/commons/models/bank';
 import { BanksStateService } from 'src/app/services/state/banks-state.service';
 import { ClientstStateService } from 'src/app/services/state/clients-state.service';
+import { BankApiService } from 'src/app/services/api/bank-api.service';
+import { PrestamistaApiService } from 'src/app/services/api/prestamista-api.service';
+import { BankInterface } from 'src/app/commons/state/interfaces/bank-interface';
+import { PlazosPagosApiService } from 'src/app/services/api/plazos-pagos-api.service';
+import { forkJoin } from 'rxjs';
+import { PrestamistaInterface } from 'src/app/commons/state/interfaces/prestamista-interface';
 
+interface UserInterface {
+  user_nick: string;
+  user_password: string;
+  prestamista: PrestamistaInterface;
+}
 @Component({
   selector: 'app-create-client',
   templateUrl: './create-client.component.html',
@@ -37,19 +50,52 @@ export class CreateClientComponent implements OnInit {
     duration: new FormControl(2),
   });
   creditCards: CreditCard[] = [];
-  banks: Bank[] = [];
+  banks: BankInterface[] = [];
+  plazos: PlazosPagoInterface[] = [];
+  loading = false;
 
   constructor(
-    private readonly clientStateService: ClientstStateService,
-    private readonly banksStateService: BanksStateService,
+    private readonly prestamistaApiService: PrestamistaApiService,
+    private readonly bankApiService: BankApiService,
+    private readonly plazosPagosApiService: PlazosPagosApiService,
     private readonly route: Router
   ) {}
 
   ngOnInit(): void {
     this.formCreateClient.reset();
-    this.banksStateService.items.subscribe((result) => {
-      this.banks = result;
-    });
+    this.initResources();
+  }
+  initResources(): void {
+    const observables = [];
+    if (this.bankApiService.getValues().length === 0) {
+      observables.push(this.bankApiService.getAll());
+    }
+    if (this.plazosPagosApiService.getValues().length === 0) {
+      observables.push(this.plazosPagosApiService.getAll());
+    }
+    if (observables.length > 0) {
+      this.loading = true;
+      forkJoin(observables).subscribe({
+        next: () => {
+          this.banks = this.bankApiService.getValues();
+          this.plazos = this.plazosPagosApiService.getValues();
+        },
+        complete: () => {
+          this.loading = false;
+        },
+        error: () => {
+          this.loading = false;
+          Swal.fire({
+            title: '¡Atención!',
+            text: 'Problemas al cargar la información',
+            icon: 'error',
+          });
+        },
+      });
+    } else {
+      this.banks = this.bankApiService.getValues();
+      this.plazos = this.plazosPagosApiService.getValues();
+    }
   }
   initCreditCards(): void {
     if (this.isCreditCard()) {
@@ -59,9 +105,8 @@ export class CreateClientComponent implements OnInit {
           facturationDate: 1,
           dueDate: 1,
           bank: {
-            id: 0,
-            facturationDate: 1,
-            name: '',
+            banco_id: 0,
+            banco_name: '',
           },
           amount: 0.0,
         },
@@ -76,9 +121,8 @@ export class CreateClientComponent implements OnInit {
       facturationDate: 2,
       dueDate: 1,
       bank: {
-        id: 0,
-        facturationDate: 1,
-        name: '',
+        banco_id: 0,
+        banco_name: '',
       },
       amount: 0.0,
     });
@@ -103,11 +147,8 @@ export class CreateClientComponent implements OnInit {
     return '';
   }
   setFacturationDate(event: MatSelectChange, creditCard: CreditCard): void {
-    const bank = this.banks.find((bank) => bank.id === event.value);
+    const bank = this.banks.find((bank) => bank.banco_id === event.value);
     if (bank) {
-      creditCard.facturationDate = bank.facturationDate
-        ? bank.facturationDate
-        : 1;
       creditCard.bank = bank;
     }
   }
@@ -137,20 +178,23 @@ export class CreateClientComponent implements OnInit {
       bank: item.bank,
       amount: item.amount,
     }));
-    const bankSelected = this.banks.filter((item) => item.id === +bank)[0];
-    const newClient: Client = {
-      firstName,
-      lastName,
-      phoneNumber,
-      documentNumber,
-      accountNumber,
-      email,
-      address,
-      creditCards,
-      bank: bankSelected,
+    const bankSelected = this.banks.find((item) => item.banco_id === +bank);
+    const newClient: UserInterface = {
+      prestamista: {
+        prestamista_nombres: firstName,
+        prestamista_apellidos: lastName,
+        prestamista_celular1: phoneNumber,
+        prestamista_dni: documentNumber,
+        prestamista_correo: email,
+        prestamista_direccion: address,
+        prestamista_codigo: '',
+        prestamista_password: '',
+        prestamista_celular2: '',
+      },
+      user_nick: '',
+      user_password: '',
     };
-
-    this.clientStateService.create(newClient).subscribe({
+    this.prestamistaApiService.create(newClient).subscribe({
       next: () => {
         Swal.fire({
           title: 'Correcto',

@@ -17,6 +17,10 @@ const routes: Routes = [
     loadChildren: () =>
       import('./resources/resources.module').then((m) => m.ResourcesModule),
   },
+  {
+    path: '**',
+    redirectTo: '',
+  },
 ];
 
 @NgModule({

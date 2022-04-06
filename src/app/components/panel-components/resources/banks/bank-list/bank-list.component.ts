@@ -13,11 +13,16 @@ export class BankListComponent implements OnInit {
   constructor(private readonly bankApiService: BankApiService) {}
 
   ngOnInit(): void {
-    if (this.bankApiService.getValues().length === 0) {
+    this.initTable();
+  }
+  initTable(): void {
+    if (this.bankApiService.getValues().length > 0) {
+      this.bancos = this.bankApiService.getValues();
+    } else {
       this.loading = true;
       this.bankApiService.getAll().subscribe(
-        (bancos: BankInterface[]) => {
-          this.bancos = bancos;
+        () => {
+          this.bancos = this.bankApiService.getValues();
           this.loading = false;
         },
         () => {
