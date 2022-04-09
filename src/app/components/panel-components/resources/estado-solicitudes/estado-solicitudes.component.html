@@ -5,16 +5,16 @@
         <thead>
           <tr>
             <th>Nombre</th>
-            <th>Día de facturación</th>
+            <th>Descripción</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let bank of banksObservable | async">
+          <tr *ngFor="let item of estadoSolicitudes">
             <td scope="row">
-              <span [innerText]="bank.name"></span>
+              <span [innerText]="item.estado_solicitud"></span>
             </td>
             <td>
-              <span [innerText]="bank.facturationDate"></span>
+              <span [innerText]="item.estado_solicitud_descripcion"></span>
             </td>
           </tr>
         </tbody>
@@ -24,7 +24,7 @@
   <div class="col-12 col-sm-6 col-lg-4">
     <div class="page-component">
       <div class="col-12 text-center">
-        <h1>Registrar nuevo banco</h1>
+        <h1>Registrar nuevo estado</h1>
       </div>
       <div class="col-sm-12 col-md-10 col-lg-8 mx-auto">
         <form [formGroup]="formCreate" (ngSubmit)="save()">
@@ -39,10 +39,10 @@
           </div>
           <div class="row">
             <mat-form-field appearance="outline">
-              <mat-label>Día de facturación:</mat-label>
-              <input matInput formControlName="facturationDate" />
-              <mat-error *ngIf="validateFormControl('facturationDate')"
-                >{{ validateFormControl('facturationDate') }}
+              <mat-label>Descripcion:</mat-label>
+              <textarea matInput formControlName="descripcion"> </textarea>
+              <mat-error *ngIf="validateFormControl('descripcion')"
+                >{{ validateFormControl('descripcion') }}
               </mat-error>
             </mat-form-field>
           </div>
@@ -53,7 +53,7 @@
               color="primary"
               class="col-auto"
             >
-              Registrar banco
+              Registrar estado de solicitud
             </button>
           </div>
         </form>

@@ -20,7 +20,6 @@ export class EstadoPagosComponent implements OnInit {
   constructor(private readonly estadoPagoApiService: EstadoPagoApiService) {}
 
   ngOnInit(): void {
-    this.formCreate.reset();
     this.initTable();
   }
   initTable(): void {

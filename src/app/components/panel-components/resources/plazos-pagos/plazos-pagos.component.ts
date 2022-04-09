@@ -21,7 +21,6 @@ export class PlazosPagosComponent implements OnInit {
   constructor(private readonly plazosPagosApiService: PlazosPagosApiService) {}
 
   ngOnInit(): void {
-    this.formCreate.reset();
     this.initTable();
   }
   initTable(): void {
@@ -66,7 +65,7 @@ export class PlazosPagosComponent implements OnInit {
     }
     const { anios, meses, tasaInteres } = this.formCreate.value;
     const plazosPago: PlazosPagoInterface = {
-      plazo_pago_id: 0,
+      id: 0,
       plazo_pago_anios: anios,
       plazo_pago_meses: meses,
       plazo_pago_tasa_interes: tasaInteres,

@@ -1,23 +1,42 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
+import { RolInterface } from 'src/app/commons/state/interfaces/rol-interface';
+import { RolesApiService } from 'src/app/services/api/roles-api.service';
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-roles',
   templateUrl: './roles.component.html',
-  styleUrls: ['./roles.component.scss']
+  styleUrls: ['./roles.component.scss'],
 })
 export class RolesComponent implements OnInit {
   formCreate: FormGroup = new FormGroup({
     name: new FormControl('', Validators.required),
-    facturationDate: new FormControl(1, Validators.required),
+    descripcion: new FormControl('', Validators.required),
   });
-  banksObservable: Observable<Array<any>> = new Observable<Array<any>>();
-  constructor() {}
+  roles: RolInterface[] = [];
+  loading = true;
+  constructor(private readonly rolesApiService: RolesApiService) {}
 
   ngOnInit(): void {
-    this.formCreate.reset();
+    this.initTable();
+  }
+  initTable(): void {
+    if (this.rolesApiService.getValues().length > 0) {
+      this.roles = this.rolesApiService.getValues();
+    } else {
+      this.loading = true;
+      this.rolesApiService.getAll().subscribe(
+        () => {
+          this.roles = this.rolesApiService.getValues();
+          this.loading = false;
+        },
+        () => {
+          this.loading = false;
+        }
+      );
+    }
   }
   validateFormControl(field: string): string {
     const formControl = this.formCreate.get(field);
@@ -43,20 +62,20 @@ export class RolesComponent implements OnInit {
       });
       return;
     }
-    const { name, facturationDate } = this.formCreate.value;
-    const bankToCreate = {
+    const { name, descripcion } = this.formCreate.value;
+    const rolToCreate: RolInterface = {
       id: 0,
-      name,
-      facturationDate: +facturationDate,
+      rol: name,
+      rol_descripcion: descripcion,
     };
-    /* this.banksStateService.create(bankToCreate).subscribe({
+    this.rolesApiService.create(rolToCreate).subscribe({
       next: () => {
         Swal.fire({
           title: 'Correcto',
           text: 'Se pudo guardar correctamente',
           icon: 'success',
         });
-        this.route.navigateByUrl('/resources/bancos/list');
+        this.initTable();
       },
       error: () => {
         Swal.fire({
@@ -65,6 +84,6 @@ export class RolesComponent implements OnInit {
           icon: 'info',
         });
       },
-    }); */
+    });
   }
 }

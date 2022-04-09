@@ -105,7 +105,7 @@ export class CreateClientComponent implements OnInit {
           facturationDate: 1,
           dueDate: 1,
           bank: {
-            banco_id: 0,
+            id: 0,
             banco_name: '',
           },
           amount: 0.0,
@@ -121,7 +121,7 @@ export class CreateClientComponent implements OnInit {
       facturationDate: 2,
       dueDate: 1,
       bank: {
-        banco_id: 0,
+        id: 0,
         banco_name: '',
       },
       amount: 0.0,
@@ -147,7 +147,7 @@ export class CreateClientComponent implements OnInit {
     return '';
   }
   setFacturationDate(event: MatSelectChange, creditCard: CreditCard): void {
-    const bank = this.banks.find((bank) => bank.banco_id === event.value);
+    const bank = this.banks.find((bank) => bank.id === event.value);
     if (bank) {
       creditCard.bank = bank;
     }
@@ -178,9 +178,10 @@ export class CreateClientComponent implements OnInit {
       bank: item.bank,
       amount: item.amount,
     }));
-    const bankSelected = this.banks.find((item) => item.banco_id === +bank);
+    const bankSelected = this.banks.find((item) => item.id === +bank);
     const newClient: UserInterface = {
       prestamista: {
+        id: 0,
         prestamista_nombres: firstName,
         prestamista_apellidos: lastName,
         prestamista_celular1: phoneNumber,

@@ -4,15 +4,20 @@ import { Injectable } from '@angular/core';
 import { ModelInterface } from 'src/app/commons/state/interfaces/model-interface';
 import { HttpClient } from '@angular/common/http';
 
-interface ResponseArray {
+interface ResponseArray<Type> {
   status: boolean;
   msg: string;
-  data: [any];
+  data: [Type];
+}
+interface ResponseCreate<Type> {
+  status: boolean;
+  msg: string;
+  data: Type;
 }
 @Injectable({
   providedIn: 'root',
 })
-export abstract class StateApiService<Type> {
+export abstract class StateApiService<Type extends ModelInterface> {
   private map = new Map<number, Type>();
   protected url = '';
   protected http!: HttpClient;
@@ -26,8 +31,9 @@ export abstract class StateApiService<Type> {
     return new Observable((observer) => {
       this.http.post(`${this.pathBackend + this.url}`, item).subscribe({
         next: (created: any) => {
-          this.map.set(created.id, created);
-          observer.next(created);
+          const { data: item } = created as ResponseCreate<Type>;
+          this.map.set(item.id, item);
+          observer.next(item);
         },
         complete: () => observer.complete(),
         error: (error) => {
@@ -46,7 +52,7 @@ export abstract class StateApiService<Type> {
         })
         .subscribe({
           next: (responseArray: any) => {
-            const { data } = responseArray as ResponseArray;
+            const { data } = responseArray as ResponseArray<Type>;
             for (const item of data) {
               const previous = this.map.get(item.id);
               this.map.set(item.id, { ...previous, ...item });

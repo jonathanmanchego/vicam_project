@@ -9,9 +9,9 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let banco of bancos;index as i">
+          <tr *ngFor="let banco of bancos; index as i">
             <td>
-              <span [innerText]="i+1"></span>
+              <span [innerText]="i + 1"></span>
             </td>
             <td scope="row">
               <span [innerText]="banco.banco_name"></span>
@@ -22,6 +22,6 @@
     </div>
   </div>
   <div class="col-12 col-sm-6 col-lg-4">
-    <app-bank-create></app-bank-create>
+    <app-bank-create (created)="initTable()"></app-bank-create>
   </div>
 </div>

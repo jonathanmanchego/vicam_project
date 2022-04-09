@@ -67,7 +67,7 @@
         >
           <mat-label>Banco:</mat-label>
           <mat-select formControlName="bank">
-            <mat-option *ngFor="let bank of banks" [value]="bank.banco_id">
+            <mat-option *ngFor="let bank of banks" [value]="bank.id">
               {{ bank.banco_name }}
             </mat-option>
           </mat-select>
@@ -96,10 +96,7 @@
         >
           <mat-label>Duración del contrato:</mat-label>
           <mat-select formControlName="duration">
-            <mat-option
-              *ngFor="let plazo of plazos"
-              [value]="plazo.plazo_pago_id"
-            >
+            <mat-option *ngFor="let plazo of plazos" [value]="plazo.id">
               {{ plazo.plazo_pago_meses }}
             </mat-option>
           </mat-select>
@@ -170,7 +167,7 @@
               <mat-select
                 (selectionChange)="setFacturationDate($event, creditCard)"
               >
-                <mat-option *ngFor="let bank of banks" [value]="bank.banco_id">
+                <mat-option *ngFor="let bank of banks" [value]="bank.id">
                   {{ bank.banco_name }}
                 </mat-option>
               </mat-select>

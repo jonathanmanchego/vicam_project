@@ -1,7 +1,7 @@
-import { CuentaAhorroInterface } from "./cuenta-ahorro-interface";
+import { CuentaAhorroInterface } from './cuenta-ahorro-interface';
+import { ModelInterface } from './model-interface';
 
-export interface PrestamistaInterface {
-  prestamista_id?: number;
+export interface PrestamistaInterface extends ModelInterface {
   prestamista_codigo: string;
   prestamista_nombres: string;
   prestamista_apellidos: string;
