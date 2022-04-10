@@ -1,35 +1,37 @@
-import Swal from 'sweetalert2';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { EstadoContratoApiService } from './../../../../services/api/estado-contrato-api.service';
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { EstadoContratoInterface } from 'src/app/commons/state/interfaces/estado-contrato-interface';
 import { EstadoPagoInterface } from 'src/app/commons/state/interfaces/estado-pago-interface';
-import { EstadoPagoApiService } from 'src/app/services/api/estado-pago-api.service';
+import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-estado-pagos',
-  templateUrl: './estado-pagos.component.html',
-  styleUrls: ['./estado-pagos.component.scss'],
+  selector: 'app-estado-contrato',
+  templateUrl: './estado-contrato.component.html',
+  styleUrls: ['./estado-contrato.component.scss'],
 })
-export class EstadoPagosComponent implements OnInit {
+export class EstadoContratoComponent implements OnInit {
   formCreate: FormGroup = new FormGroup({
     name: new FormControl('', Validators.required),
     descripcion: new FormControl('', Validators.required),
   });
   loading = false;
-  estadoPagos: EstadoPagoInterface[] = [];
-  constructor(private readonly estadoPagoApiService: EstadoPagoApiService) {}
+  estadoContratos: EstadoContratoInterface[] = [];
+  constructor(
+    private readonly estadoContratoApiService: EstadoContratoApiService
+  ) {}
 
   ngOnInit(): void {
     this.initTable();
   }
   initTable(): void {
-    if (this.estadoPagoApiService.getValues().length > 0) {
-      this.estadoPagos = this.estadoPagoApiService.getValues();
+    if (this.estadoContratoApiService.getValues().length > 0) {
+      this.estadoContratos = this.estadoContratoApiService.getValues();
     } else {
       this.loading = true;
-      this.estadoPagoApiService.getAll().subscribe(
+      this.estadoContratoApiService.getAll().subscribe(
         () => {
-          this.estadoPagos = this.estadoPagoApiService.getValues();
+          this.estadoContratos = this.estadoContratoApiService.getValues();
           this.loading = false;
         },
         () => {
@@ -63,13 +65,13 @@ export class EstadoPagosComponent implements OnInit {
       return;
     }
     const { name, descripcion } = this.formCreate.value;
-    const estadoPagoToCreate = {
+    const estadoPagoToCreate: EstadoContratoInterface = {
       id: 0,
-      ep_estado: name,
-      ep_descripcion: descripcion,
+      estado_contrato: name,
+      estado_contrato_descripcion: descripcion,
     };
     this.loading = true;
-    this.estadoPagoApiService.create(estadoPagoToCreate).subscribe({
+    this.estadoContratoApiService.create(estadoPagoToCreate).subscribe({
       next: () => {
         this.loading = false;
         Swal.fire({

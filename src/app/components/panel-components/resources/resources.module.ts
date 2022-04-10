@@ -18,9 +18,11 @@ import { EstadoPagosComponent } from './estado-pagos/estado-pagos.component';
 import { PlazosPagosComponent } from './plazos-pagos/plazos-pagos.component';
 import { RolesComponent } from './roles/roles.component';
 import { UsuariosComponent } from './usuarios/usuarios.component';
+import { EstadoContratoComponent } from './estado-contrato/estado-contrato.component';
+import { TipoTarjetasComponent } from './tipo-tarjetas/tipo-tarjetas.component';
 
 @NgModule({
-  declarations: [BankCreateComponent, BankListComponent, ResourcesGeneralComponent, EstadoSolicitudesComponent, EstadoPagosComponent, PlazosPagosComponent, RolesComponent, UsuariosComponent],
+  declarations: [BankCreateComponent, BankListComponent, ResourcesGeneralComponent, EstadoSolicitudesComponent, EstadoPagosComponent, PlazosPagosComponent, RolesComponent, UsuariosComponent, EstadoContratoComponent, TipoTarjetasComponent],
   imports: [
     CommonModule,
     ResourcesRoutingModule,

@@ -14,5 +14,6 @@ app-toolbar-panel {
   display: flex;
   gap: 1rem;
   padding-top: 1rem;
+  flex-wrap: wrap;
   width: 100%;
 }

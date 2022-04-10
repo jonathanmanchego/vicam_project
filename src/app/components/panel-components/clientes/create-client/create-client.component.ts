@@ -1,3 +1,5 @@
+import { CuentaAhorroInterface } from './../../../../commons/state/interfaces/cuenta-ahorro-interface';
+import { TarjetaApiService } from './../../../../services/api/tarjeta-api.service';
 import { UsuarioInterface } from './../../../../commons/state/interfaces/usuario-interface';
 import { PlazosPagoInterface } from './../../../../commons/state/interfaces/plazos-pago-interface';
 import { Component, OnInit } from '@angular/core';
@@ -16,6 +18,12 @@ import { BankInterface } from 'src/app/commons/state/interfaces/bank-interface';
 import { PlazosPagosApiService } from 'src/app/services/api/plazos-pagos-api.service';
 import { forkJoin } from 'rxjs';
 import { PrestamistaInterface } from 'src/app/commons/state/interfaces/prestamista-interface';
+import { TarjetaInterface } from 'src/app/commons/state/interfaces/tarjeta-interface';
+import { TipoTarjetaApiService } from 'src/app/services/api/tipo-tarjeta-api.service';
+import { TipoTarjetaInterface } from 'src/app/commons/state/interfaces/tipo-tarjeta-interface';
+import { SolicitudApiService } from 'src/app/services/api/solicitud-api.service';
+import { SolicitudInterface } from 'src/app/commons/state/interfaces/solicitud-interface';
+import * as moment from 'moment';
 
 interface UserInterface {
   user_nick: string;
@@ -46,18 +54,26 @@ export class CreateClientComponent implements OnInit {
     email: new FormControl('', [Validators.required, Validators.email]),
     address: new FormControl('', Validators.required),
     isCreditCard: new FormControl(false),
-    interes: new FormControl(0, Validators.required),
+    interes: new FormControl(
+      { value: '', disabled: true },
+      Validators.required
+    ),
     duration: new FormControl(2),
+    amount: new FormControl(0, Validators.required),
   });
-  creditCards: CreditCard[] = [];
+  creditCards: TarjetaInterface[] = [];
   banks: BankInterface[] = [];
   plazos: PlazosPagoInterface[] = [];
+  tipoTarjetas: TipoTarjetaInterface[] = [];
   loading = false;
 
   constructor(
+    private readonly tipoTarjetaApiService: TipoTarjetaApiService,
+    private readonly tarjetaApiService: TarjetaApiService,
     private readonly prestamistaApiService: PrestamistaApiService,
     private readonly bankApiService: BankApiService,
     private readonly plazosPagosApiService: PlazosPagosApiService,
+    private readonly solicitudApiService: SolicitudApiService,
     private readonly route: Router
   ) {}
 
@@ -73,18 +89,25 @@ export class CreateClientComponent implements OnInit {
     if (this.plazosPagosApiService.getValues().length === 0) {
       observables.push(this.plazosPagosApiService.getAll());
     }
+    // if (this.tipoTarjetaApiService.getValues().length === 0) {
+    //   observables.push(this.tipoTarjetaApiService.getAll());
+    // }
     if (observables.length > 0) {
       this.loading = true;
       forkJoin(observables).subscribe({
         next: () => {
           this.banks = this.bankApiService.getValues();
           this.plazos = this.plazosPagosApiService.getValues();
+          // this.tipoTarjetas = this.tipoTarjetaApiService.getValues();
         },
         complete: () => {
           this.loading = false;
         },
         error: () => {
           this.loading = false;
+          this.banks = this.bankApiService.getValues();
+          this.plazos = this.plazosPagosApiService.getValues();
+          // this.tipoTarjetas = this.tipoTarjetaApiService.getValues();
           Swal.fire({
             title: '¡Atención!',
             text: 'Problemas al cargar la información',
@@ -101,14 +124,15 @@ export class CreateClientComponent implements OnInit {
     if (this.isCreditCard()) {
       this.creditCards = [
         {
-          accountNumber: '',
-          facturationDate: 1,
-          dueDate: 1,
-          bank: {
-            id: 0,
-            banco_name: '',
-          },
+          id: 0,
+          tarjeta_num: '',
+          facturation_date: 1,
+          due_date: 1,
+          banco_id: this.banks.length > 0 ? this.banks[0].id : 0,
           amount: 0.0,
+          tipo_tarjeta_id:
+            this.tipoTarjetas.length > 0 ? this.tipoTarjetas[0].id : 0,
+          prestamista_id: 0,
         },
       ];
     } else {
@@ -117,14 +141,20 @@ export class CreateClientComponent implements OnInit {
   }
   addCreditCard(): void {
     this.creditCards.push({
-      accountNumber: '',
-      facturationDate: 2,
-      dueDate: 1,
-      bank: {
-        id: 0,
-        banco_name: '',
-      },
+      id: 0,
+      tarjeta_num: '',
+      facturation_date: 1,
+      due_date: 1,
+      banco_id: this.banks ? this.banks[0].id : 0,
       amount: 0.0,
+      tipo_tarjeta_id: this.tipoTarjetas ? this.tipoTarjetas[0].id : 0,
+      prestamista_id: 0,
+    });
+  }
+  changeDurationContract(event: number): void {
+    const plazo = this.plazos.find((item) => item.id === event);
+    this.formCreateClient.patchValue({
+      interes: Number(plazo?.plazo_pago_tasa_interes),
     });
   }
   isCreditCard(): boolean {
@@ -146,12 +176,6 @@ export class CreateClientComponent implements OnInit {
     }
     return '';
   }
-  setFacturationDate(event: MatSelectChange, creditCard: CreditCard): void {
-    const bank = this.banks.find((bank) => bank.id === event.value);
-    if (bank) {
-      creditCard.bank = bank;
-    }
-  }
   saveNewClient(): void {
     if (!this.formCreateClient.valid) {
       Swal.fire({
@@ -169,15 +193,12 @@ export class CreateClientComponent implements OnInit {
       accountNumber,
       email,
       address,
+      duration,
+      interes,
+      amount,
       bank,
     } = this.formCreateClient.value;
-    const creditCards: CreditCard[] = this.creditCards.map((item) => ({
-      dueDate: item.dueDate,
-      accountNumber: item.accountNumber,
-      facturationDate: Number(item.facturationDate),
-      bank: item.bank,
-      amount: item.amount,
-    }));
+
     const bankSelected = this.banks.find((item) => item.id === +bank);
     const newClient: UserInterface = {
       prestamista: {
@@ -196,13 +217,163 @@ export class CreateClientComponent implements OnInit {
       user_password: '',
     };
     this.prestamistaApiService.create(newClient).subscribe({
-      next: () => {
-        Swal.fire({
-          title: 'Correcto',
-          text: 'Se pudo guardar correctamente',
-          icon: 'success',
-        });
-        this.route.navigateByUrl('/clientes/list');
+      next: (prestamista: PrestamistaInterface) => {
+        const creditCards: TarjetaInterface[] = this.creditCards.map(
+          (item) => ({
+            due_date: item.due_date,
+            tarjeta_num: item.tarjeta_num,
+            facturation_date: Number(item.facturation_date),
+            banco_id: item.banco_id,
+            amount: item.amount,
+            id: 0,
+            prestamista_id: prestamista.id,
+            tipo_tarjeta_id: 1,
+            cuenta_ahorro: {
+              banco_id: item.banco_id,
+              cuenta_numero: item.tarjeta_num,
+              id: 0,
+              prestamista_id: prestamista.id,
+            },
+          })
+        );
+        const cuentaAhorro = {
+          banco_id: +bank,
+          id: 0,
+          prestamista_id: prestamista.id,
+          tarjeta_num: accountNumber,
+          tipo_tarjeta_id: 2,
+          cuenta_ahorro: {
+            id: 0,
+            banco_id: +bank,
+            cuenta_numero: accountNumber,
+            prestamista_id: prestamista.id,
+          },
+        };
+        if (creditCards.length > 0) {
+          const observablesCards = creditCards.map((item) =>
+            this.tarjetaApiService.create(item)
+          );
+          forkJoin(observablesCards).subscribe({
+            next: () => {},
+            complete: () => {
+              this.tarjetaApiService.create(cuentaAhorro).subscribe({
+                next: (tarjetaCreated: TarjetaInterface) => {
+                  const plazo = this.plazos.find(
+                    (item) => item.id === duration
+                  );
+                  const solicitud: SolicitudInterface = {
+                    id: 0,
+                    solicitud_boucher: '',
+                    banco_id: +bank,
+                    cuenta_ahorro_id:
+                      tarjetaCreated.cuentas_ahorro &&
+                      tarjetaCreated.cuentas_ahorro.length > 0
+                        ? tarjetaCreated.cuentas_ahorro[0].id
+                        : 0,
+                    estado_solicitud_id: 1,
+                    plazo_pago_id: duration,
+                    prestamista_id: prestamista.id,
+                    solicitud_duracion_meses: plazo?.plazo_pago_meses || 1,
+                    solicitud_fecha: moment().format(),
+                    solicitud_monto: amount,
+                    solicitud_numero: '',
+                    solicitud_numero_deposito: '',
+                    tarjeta_id: tarjetaCreated.id,
+                  };
+                  this.solicitudApiService.create(solicitud).subscribe(
+                    () => {
+                      this.loading = false;
+                      Swal.fire({
+                        title: 'Correcto',
+                        text: 'Se pudo guardar correctamente',
+                        icon: 'success',
+                      });
+
+                      this.route.navigateByUrl('/clientes/list');
+                    },
+                    () => {
+                      this.loading = false;
+                      Swal.fire({
+                        title: '¡Atención!',
+                        text: 'No se pudo guardar correctamente',
+                        icon: 'info',
+                      });
+                    }
+                  );
+                },
+                error: () => {
+                  this.loading = false;
+                  Swal.fire({
+                    title: '¡Atención!',
+                    text: 'No se pudo guardar correctamente',
+                    icon: 'info',
+                  });
+                },
+              });
+            },
+            error: () => {
+              this.loading = false;
+              Swal.fire({
+                title: '¡Atención!',
+                text: 'No se pudo guardar correctamente',
+                icon: 'info',
+              });
+            },
+          });
+        } else {
+          this.tarjetaApiService.create(cuentaAhorro).subscribe({
+            next: (tarjetaCreated: TarjetaInterface) => {
+              const plazo = this.plazos.find((item) => item.id === duration);
+              const solicitud: SolicitudInterface = {
+                id: 0,
+                solicitud_boucher: '',
+                banco_id: +bank,
+                cuenta_ahorro_id:
+                  tarjetaCreated.cuentas_ahorro &&
+                  tarjetaCreated.cuentas_ahorro.length > 0
+                    ? tarjetaCreated.cuentas_ahorro[0].id
+                    : 0,
+                estado_solicitud_id: 1,
+                plazo_pago_id: duration,
+                prestamista_id: prestamista.id,
+                solicitud_duracion_meses: plazo?.plazo_pago_meses || 1,
+                solicitud_fecha: moment().format(),
+                solicitud_monto: amount,
+                solicitud_numero: '',
+                solicitud_numero_deposito: '',
+                tarjeta_id: tarjetaCreated.id,
+              };
+              this.solicitudApiService.create(solicitud).subscribe(
+                () => {
+                  this.loading = false;
+                  Swal.fire({
+                    title: 'Correcto',
+                    text: 'Se pudo guardar correctamente',
+                    icon: 'success',
+                  });
+
+                  this.route.navigateByUrl('/clientes/list');
+                },
+                () => {
+                  this.loading = false;
+                  Swal.fire({
+                    title: '¡Atención!',
+                    text: 'No se pudo guardar correctamente',
+                    icon: 'info',
+                  });
+                }
+              );
+            },
+            error: () => {
+              this.loading = false;
+              Swal.fire({
+                title: '¡Atención!',
+                text: 'No se pudo guardar correctamente',
+                icon: 'info',
+              });
+            },
+          });
+        }
       },
       error: () => {
         Swal.fire({

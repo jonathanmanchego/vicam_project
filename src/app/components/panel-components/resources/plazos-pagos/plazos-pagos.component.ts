@@ -79,6 +79,7 @@ export class PlazosPagosComponent implements OnInit {
           text: 'Se pudo guardar correctamente',
           icon: 'success',
         });
+        this.initTable();
       },
       error: () => {
         this.loading = false;

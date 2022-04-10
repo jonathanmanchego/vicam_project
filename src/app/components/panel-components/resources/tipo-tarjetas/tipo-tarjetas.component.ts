@@ -1,35 +1,34 @@
-import Swal from 'sweetalert2';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { EstadoPagoInterface } from 'src/app/commons/state/interfaces/estado-pago-interface';
-import { EstadoPagoApiService } from 'src/app/services/api/estado-pago-api.service';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { EstadoContratoInterface } from 'src/app/commons/state/interfaces/estado-contrato-interface';
+import { TipoTarjetaInterface } from 'src/app/commons/state/interfaces/tipo-tarjeta-interface';
+import { TipoTarjetaApiService } from 'src/app/services/api/tipo-tarjeta-api.service';
+import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-estado-pagos',
-  templateUrl: './estado-pagos.component.html',
-  styleUrls: ['./estado-pagos.component.scss'],
+  selector: 'app-tipo-tarjetas',
+  templateUrl: './tipo-tarjetas.component.html',
+  styleUrls: ['./tipo-tarjetas.component.scss'],
 })
-export class EstadoPagosComponent implements OnInit {
+export class TipoTarjetasComponent implements OnInit {
   formCreate: FormGroup = new FormGroup({
     name: new FormControl('', Validators.required),
-    descripcion: new FormControl('', Validators.required),
   });
   loading = false;
-  estadoPagos: EstadoPagoInterface[] = [];
-  constructor(private readonly estadoPagoApiService: EstadoPagoApiService) {}
+  tipoTarjetas: TipoTarjetaInterface[] = [];
+  constructor(private readonly tipoTarjetaApiService: TipoTarjetaApiService) {}
 
   ngOnInit(): void {
     this.initTable();
   }
   initTable(): void {
-    if (this.estadoPagoApiService.getValues().length > 0) {
-      this.estadoPagos = this.estadoPagoApiService.getValues();
+    if (this.tipoTarjetaApiService.getValues().length > 0) {
+      this.tipoTarjetas = this.tipoTarjetaApiService.getValues();
     } else {
       this.loading = true;
-      this.estadoPagoApiService.getAll().subscribe(
+      this.tipoTarjetaApiService.getAll().subscribe(
         () => {
-          this.estadoPagos = this.estadoPagoApiService.getValues();
+          this.tipoTarjetas = this.tipoTarjetaApiService.getValues();
           this.loading = false;
         },
         () => {
@@ -62,14 +61,13 @@ export class EstadoPagosComponent implements OnInit {
       });
       return;
     }
-    const { name, descripcion } = this.formCreate.value;
-    const estadoPagoToCreate = {
+    const { name } = this.formCreate.value;
+    const tipoTarjetaToCreate: TipoTarjetaInterface = {
       id: 0,
-      ep_estado: name,
-      ep_descripcion: descripcion,
+      tipo_tarjeta: name,
     };
     this.loading = true;
-    this.estadoPagoApiService.create(estadoPagoToCreate).subscribe({
+    this.tipoTarjetaApiService.create(tipoTarjetaToCreate).subscribe({
       next: () => {
         this.loading = false;
         Swal.fire({

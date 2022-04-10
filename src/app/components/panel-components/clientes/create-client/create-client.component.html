@@ -95,7 +95,10 @@
           class="col-lg-3 col-12 col-sm-6 col-md-4"
         >
           <mat-label>Duración del contrato:</mat-label>
-          <mat-select formControlName="duration">
+          <mat-select
+            formControlName="duration"
+            (valueChange)="changeDurationContract($event)"
+          >
             <mat-option *ngFor="let plazo of plazos" [value]="plazo.id">
               {{ plazo.plazo_pago_meses }}
             </mat-option>
@@ -112,6 +115,7 @@
           <input
             matInput
             formControlName="interes"
+            readonly
             type="number"
             step="0.01"
             min="0"
@@ -148,6 +152,10 @@
             >{{ validateFormControl('address') }}
           </mat-error>
         </mat-form-field>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Monto:</mat-label>
+          <input formControlName="amount" matInput type="number" />
+        </mat-form-field>
       </div>
       <div class="w-100-credit-card">
         <mat-slide-toggle
@@ -164,9 +172,7 @@
           <div class="col-grid">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Banco:</mat-label>
-              <mat-select
-                (selectionChange)="setFacturationDate($event, creditCard)"
-              >
+              <mat-select>
                 <mat-option *ngFor="let bank of banks" [value]="bank.id">
                   {{ bank.banco_name }}
                 </mat-option>
@@ -180,7 +186,7 @@
                 matInput
                 type="text"
                 autocomplete="off"
-                [(ngModel)]="creditCard.accountNumber"
+                [(ngModel)]="creditCard.tarjeta_num"
                 [ngModelOptions]="{ standalone: true }"
               />
             </mat-form-field>
@@ -203,7 +209,7 @@
                 matInput
                 type="number"
                 autocomplete="off"
-                [(ngModel)]="creditCard.facturationDate"
+                [(ngModel)]="creditCard.facturation_date"
                 [ngModelOptions]="{ standalone: true }"
               />
             </mat-form-field>
@@ -215,7 +221,7 @@
                 matInput
                 type="number"
                 autocomplete="off"
-                [(ngModel)]="creditCard.dueDate"
+                [(ngModel)]="creditCard.due_date"
                 [ngModelOptions]="{ standalone: true }"
               />
             </mat-form-field>
@@ -227,7 +233,7 @@
                 matInput
                 type="number"
                 autocomplete="off"
-                [(ngModel)]="creditCard.dueDate"
+                [(ngModel)]="creditCard.cuotas"
                 [ngModelOptions]="{ standalone: true }"
               />
             </mat-form-field>
@@ -239,7 +245,7 @@
                 matInput
                 type="number"
                 autocomplete="off"
-                [(ngModel)]="creditCard.dueDate"
+                [(ngModel)]="creditCard.cuotas_monto"
                 [ngModelOptions]="{ standalone: true }"
               />
             </mat-form-field>
