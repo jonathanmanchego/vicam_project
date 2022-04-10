@@ -77,6 +77,7 @@ export class EstadoSolicitudesComponent implements OnInit {
           text: 'Se pudo guardar correctamente',
           icon: 'success',
         });
+        this.initTable();
       },
       error: () => {
         Swal.fire({
