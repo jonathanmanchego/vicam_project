@@ -29,7 +29,19 @@
         <mat-list-item
           class="mat-list-item-menu"
           role="button"
-          (click)="goToRoute('/clientes/list')"
+          (click)="goToRoute('/solicitudes')"
+        >
+          <div class="list-item-content">
+            <mat-icon matTooltip="Solicitudes" matTooltipPosition="right"
+              >note_add</mat-icon
+            >
+            <small>Solicitudes</small>
+          </div>
+        </mat-list-item>
+        <mat-list-item
+          class="mat-list-item-menu"
+          role="button"
+          (click)="goToRoute('/clientes')"
         >
           <div class="list-item-content">
             <mat-icon matTooltip="Clientes" matTooltipPosition="right"
@@ -68,6 +80,14 @@
   <div class="sidenav-content">
     <app-toolbar-panel (toggleMenu)="toggleMenu()"></app-toolbar-panel>
     <div class="panel-principal">
+      <ngx-spinner
+        bdColor="rgba(0, 0, 0, 0.4)"
+        size="medium"
+        color="#fff"
+        type="timer"
+        [fullScreen]="true"
+        ><p style="color: white">Cargando...</p></ngx-spinner
+      >
       <nav
         style="
           --bs-breadcrumb-divider: url(

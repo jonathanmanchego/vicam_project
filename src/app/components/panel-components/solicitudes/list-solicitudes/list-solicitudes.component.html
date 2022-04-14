@@ -1,0 +1,77 @@
+<div class="w-100">
+  <!-- <button
+    class="col-auto"
+    mat-raised-button
+    color="primary"
+    [routerLink]="['/clientes/create']"
+  >
+    Nueva solicitud
+  </button> -->
+</div>
+<div class="page-component w-100 mt-3">
+  <div class="list">
+    <table class="table-custom-vicam">
+      <thead>
+        <tr>
+          <th class="col-head-custom-grid">
+            <span>Prestamista</span>
+          </th>
+          <th class="col-head-custom-grid">
+            <span>Estado</span>
+          </th>
+          <th class="col-head-custom-grid">
+            <span>Plazo e interes</span>
+          </th>
+          <th class="col-head-custom-grid">
+            <span>Fecha</span>
+          </th>
+          <th class="col-head-custom-grid">
+            <span>Monto</span>
+          </th>
+          <th class="col-head-custom-grid">
+            <span>Acciones</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="body-row-custom-grid" *ngFor="let solicitud of solicitudes">
+          <td class="col-body-custom-grid">
+            <span [innerText]="parseFullName(solicitud.prestamista)"></span>
+          </td>
+          <td class="col-body-custom-grid">
+            <span
+              [innerText]="solicitud.estado_solicitud?.estado_solicitud"
+            ></span>
+          </td>
+          <td class="col-body-custom-grid">
+            <span [innerText]="parsePlazoPago(solicitud.plazo_pago)"></span>
+          </td>
+          <td class="col-body-custom-grid">
+            <span
+              [innerText]="solicitud.solicitud_fecha | date: 'dd-MM-yyyy'"
+            ></span>
+          </td>
+          <td class="col-body-custom-grid">
+            <span
+              [innerText]="'S/.' + (solicitud.solicitud_monto | number: '0.2')"
+            ></span>
+          </td>
+          <td class="col-body-custom-grid">
+            <button mat-icon-button [matMenuTriggerFor]="menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button
+                mat-menu-item
+                (click)="generateContract(solicitud.prestamista)"
+              >
+                <mat-icon>post_add</mat-icon>
+                Generar contrato
+              </button>
+            </mat-menu>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

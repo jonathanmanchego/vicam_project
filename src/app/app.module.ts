@@ -22,6 +22,7 @@ import { LayoutModule } from './components/layout/layout.module';
 import { PageComponentModule } from './page-component/page-component.module';
 import { NgChartsModule } from 'ng2-charts';
 import { HttpClientModule } from '@angular/common/http';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 const MaterialModules = [
   MatSidenavModule,
@@ -48,6 +49,7 @@ const MaterialModules = [
     PageComponentModule,
     LayoutModule,
     PanelComponentsModule,
+    NgxSpinnerModule,
     NgChartsModule,
     HttpClientModule,
   ],

@@ -12,6 +12,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { ToolbarPanelComponent } from './toolbar-panel/toolbar-panel.component';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 const MaterialModules = [
   MatSidenavModule,
@@ -33,6 +34,7 @@ const components = [SidenavComponent, ToolbarPanelComponent];
     FormsModule,
     RouterModule,
     ...MaterialModules,
+    NgxSpinnerModule,
   ],
   exports: components,
 })

@@ -1,3 +1,4 @@
+import { LoadingService } from 'src/app/services/layout/loading.service';
 import { ContratoApiService } from './../../../../services/api/contrato-api.service';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -20,35 +21,21 @@ export class ListClientComponent implements OnInit {
   clients: Array<PrestamistaInterface> = [];
   constructor(
     private readonly prestamistaApiService: PrestamistaApiService,
-    private readonly contratoApiService: ContratoApiService
+    private readonly contratoApiService: ContratoApiService,
+    private readonly loadingService: LoadingService
   ) {}
 
   ngOnInit(): void {
-    this.prestamistaApiService
-      .getAll()
-      .subscribe((res: Array<PrestamistaInterface>) => {
-        this.clients = res;
-      });
-  }
-  setAvgAges(): void {
-    let avg = 0;
-    this.clientsObservable.subscribe((items) => {
-      const ages = items.map((client) => +client.age);
-      avg = ages.reduce(
-        (prevClient: number, nextClient: number) => prevClient + nextClient,
-        0
-      );
-      this.avgAges = avg / items.length;
-      this.setDesvStandar(ages);
-    });
-  }
-  setDesvStandar(ages: Array<number>): void {
-    ages = ages.map((age) => {
-      return (age - this.avgAges) ** 2;
-    });
-    let sum = ages.reduce((acc, curr) => acc + curr, 0);
-    let variance = sum / ages.length;
-    this.devStandar = Math.sqrt(sum / ages.length);
+    this.loadingService.startLoading();
+    this.prestamistaApiService.getAll().subscribe(
+      (res: Array<PrestamistaInterface>) => {
+        this.clients = this.prestamistaApiService.getValues();
+        this.loadingService.stopLoading();
+      },
+      () => {
+        this.loadingService.stopLoading();
+      }
+    );
   }
   generateContract(prestamista: PrestamistaInterface): void {
     this.contratoApiService.generateContract(prestamista.id).subscribe(

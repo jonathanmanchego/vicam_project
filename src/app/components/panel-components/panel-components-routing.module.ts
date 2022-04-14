@@ -18,6 +18,13 @@ const routes: Routes = [
       import('./resources/resources.module').then((m) => m.ResourcesModule),
   },
   {
+    path: 'solicitudes',
+    loadChildren: () =>
+      import('./solicitudes/solicitudes.module').then(
+        (m) => m.SolicitudesModule
+      ),
+  },
+  {
     path: '**',
     redirectTo: '',
   },

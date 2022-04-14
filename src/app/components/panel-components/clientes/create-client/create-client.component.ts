@@ -60,6 +60,10 @@ export class CreateClientComponent implements OnInit {
     ),
     duration: new FormControl(2),
     amount: new FormControl(0, Validators.required),
+    pais: new FormControl(),
+    departamento: new FormControl(),
+    provincia: new FormControl(),
+    localidad: new FormControl(),
   });
   creditCards: TarjetaInterface[] = [];
   banks: BankInterface[] = [];
@@ -154,7 +158,7 @@ export class CreateClientComponent implements OnInit {
   changeDurationContract(event: number): void {
     const plazo = this.plazos.find((item) => item.id === event);
     this.formCreateClient.patchValue({
-      interes: Number(plazo?.plazo_pago_tasa_interes),
+      interes: (Number(plazo?.plazo_pago_tasa_interes) * 100).toFixed(2) + '%',
     });
   }
   isCreditCard(): boolean {
@@ -197,6 +201,9 @@ export class CreateClientComponent implements OnInit {
       interes,
       amount,
       bank,
+      pais,
+      provincia,
+      localia,
     } = this.formCreateClient.value;
 
     const bankSelected = this.banks.find((item) => item.id === +bank);
@@ -212,6 +219,9 @@ export class CreateClientComponent implements OnInit {
         prestamista_codigo: '',
         prestamista_password: '',
         prestamista_celular2: '',
+        pais_id: pais,
+        provincia_id: provincia,
+        localia_id: localia,
       },
       user_nick: '',
       user_password: '',
@@ -289,7 +299,7 @@ export class CreateClientComponent implements OnInit {
                         icon: 'success',
                       });
 
-                      this.route.navigateByUrl('/clientes/list');
+                      this.route.navigateByUrl('/clientes');
                     },
                     () => {
                       this.loading = false;
@@ -352,7 +362,7 @@ export class CreateClientComponent implements OnInit {
                     icon: 'success',
                   });
 
-                  this.route.navigateByUrl('/clientes/list');
+                  this.route.navigateByUrl('/clientes');
                 },
                 () => {
                   this.loading = false;
