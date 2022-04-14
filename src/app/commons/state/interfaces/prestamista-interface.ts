@@ -1,3 +1,4 @@
+import { TarjetaInterface } from 'src/app/commons/state/interfaces/tarjeta-interface';
 import { CuentaAhorroInterface } from './cuenta-ahorro-interface';
 import { ModelInterface } from './model-interface';
 
@@ -12,5 +13,6 @@ export interface PrestamistaInterface extends ModelInterface {
   prestamista_correo: string;
   prestamista_password: string;
   prestamista_direccion: string;
+  tarjetas?: TarjetaInterface[];
   cuenta_ahorro?: CuentaAhorroInterface;
 }

@@ -17,6 +17,18 @@
         <mat-list-item
           class="mat-list-item-menu"
           role="button"
+          (click)="goToRoute('/')"
+        >
+          <div class="list-item-content">
+            <mat-icon matTooltip="Inicio" matTooltipPosition="right"
+              >home</mat-icon
+            >
+            <small>Inicio</small>
+          </div>
+        </mat-list-item>
+        <mat-list-item
+          class="mat-list-item-menu"
+          role="button"
           (click)="goToRoute('/clientes/list')"
         >
           <div class="list-item-content">

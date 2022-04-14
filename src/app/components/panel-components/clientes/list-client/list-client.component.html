@@ -62,9 +62,12 @@
                     <mat-icon>more_vert</mat-icon>
                   </button>
                   <mat-menu #menu="matMenu">
-                    <button mat-menu-item>
+                    <button
+                      mat-menu-item
+                      (click)="generateContract(prestamista)"
+                    >
                       <mat-icon>post_add</mat-icon>
-                      Generar reporte
+                      Generar contrato
                     </button>
                   </mat-menu>
                 </div>
@@ -84,7 +87,9 @@
                 ></span>
               </div>
               <div class="col-body-custom-grid">
-                <span [innerText]="prestamista.cuenta_ahorro.cuenta_numero"></span>
+                <span
+                  [innerText]="prestamista.cuenta_ahorro.cuenta_numero"
+                ></span>
               </div>
             </div>
             <!-- <ng-container
