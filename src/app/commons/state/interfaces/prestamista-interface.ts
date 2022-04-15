@@ -17,5 +17,5 @@ export interface PrestamistaInterface extends ModelInterface {
   provincia_id: number;
   pais_id: number;
   tarjetas?: TarjetaInterface[];
-  cuenta_ahorro?: CuentaAhorroInterface;
+  cuenta_ahorro?: CuentaAhorroInterface[];
 }

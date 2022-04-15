@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { PlazosPagoInterface } from 'src/app/commons/state/interfaces/plazos-pago-interface';
 import { PlazosPagosApiService } from 'src/app/services/api/plazos-pagos-api.service';
+import { BreadcrumService } from 'src/app/services/layout/breadcrum.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -18,9 +19,29 @@ export class PlazosPagosComponent implements OnInit {
   });
   loading = false;
   plazosPago: PlazosPagoInterface[] = [];
-  constructor(private readonly plazosPagosApiService: PlazosPagosApiService) {}
+  constructor(
+    private readonly plazosPagosApiService: PlazosPagosApiService,
+    private readonly breadcrumService: BreadcrumService
+  ) {}
 
   ngOnInit(): void {
+    this.breadcrumService.setBreadcrum([
+      {
+        label: 'Inicio',
+        current: false,
+        link: '/',
+      },
+      {
+        label: 'Datos Generales',
+        current: false,
+        link: '/resources/',
+      },
+      {
+        label: 'Bancos',
+        current: true,
+        link: undefined,
+      },
+    ]);
     this.initTable();
   }
   initTable(): void {

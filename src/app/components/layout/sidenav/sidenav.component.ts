@@ -4,6 +4,10 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { SidenavService } from 'src/app/services/layout/sidenav.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import {
+  Breadcrum,
+  BreadcrumService,
+} from 'src/app/services/layout/breadcrum.service';
 
 @Component({
   selector: 'app-sidenav',
@@ -14,10 +18,19 @@ export class SidenavComponent implements OnInit, OnDestroy {
   isOpenSidenav = false;
   subscriptionSidenav: Subscription = new Subscription();
   subscriptionLoading: Subscription = new Subscription();
+  subscriptionBreadcrum: Subscription = new Subscription();
+  breadcrums: Breadcrum[] = [
+    {
+      label: '',
+      link: '',
+      current: false,
+    },
+  ];
   constructor(
     private readonly sidenavService: SidenavService,
     private readonly loadingService: LoadingService,
     private readonly ngxSpinnerService: NgxSpinnerService,
+    private readonly breadcrumService: BreadcrumService,
     private readonly router: Router
   ) {}
 
@@ -36,9 +49,19 @@ export class SidenavComponent implements OnInit, OnDestroy {
         }
       }
     );
+    this.subscriptionBreadcrum =
+      this.breadcrumService.observableChangeBreadcrum.subscribe(
+        (breadcrums: Breadcrum[]) => {
+          setTimeout(() => {
+            this.breadcrums = breadcrums;
+          }, 100);
+        }
+      );
   }
   ngOnDestroy(): void {
     this.subscriptionSidenav.unsubscribe();
+    this.subscriptionLoading.unsubscribe();
+    this.subscriptionBreadcrum.unsubscribe();
   }
 
   goToRoute(path: string): void {

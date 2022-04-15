@@ -30,13 +30,13 @@
         <div class="col-head-custom-grid">
           <span>Dirección</span>
         </div>
-        <div class="col-head-custom-grid">
+        <div class="col-head-custom-grid d-flex justify-content-end">
           <span>Acciones</span>
         </div>
       </div>
       <div class="body-custom-grid">
         <mat-accordion class="accordion-body">
-          <mat-expansion-panel *ngFor="let prestamista of clients">
+          <mat-expansion-panel *ngFor="let prestamista of clients" hideToggle>
             <mat-expansion-panel-header>
               <div class="body-row-custom-grid">
                 <div class="col-body-custom-grid">
@@ -57,7 +57,7 @@
                 <div class="col-body-custom-grid">
                   <span [innerText]="prestamista.prestamista_direccion"></span>
                 </div>
-                <div class="col-body-custom-grid">
+                <div class="col-body-custom-grid justify-content-end">
                   <button mat-icon-button [matMenuTriggerFor]="menu">
                     <mat-icon>more_vert</mat-icon>
                   </button>
@@ -73,25 +73,26 @@
                 </div>
               </div>
             </mat-expansion-panel-header>
-            <div class="body-row-custom-grid" *ngIf="prestamista.cuenta_ahorro">
-              <div class="col-body-custom-grid">
-                <span>Cuenta de ahorros:</span>
+            <ng-container *ngIf="prestamista.cuenta_ahorro">
+              <div class="body-row-custom-grid">
+                <div class="col-body-custom-grid">
+                  <span>Cuenta de ahorros:</span>
+                </div>
               </div>
-            </div>
-            <div class="body-row-custom-grid" *ngIf="prestamista.cuenta_ahorro">
-              <div class="col-body-custom-grid"></div>
-              <div class="col-body-custom-grid"></div>
-              <div class="col-body-custom-grid">
-                <span
-                  [innerText]="prestamista.cuenta_ahorro?.banco?.banco_name"
-                ></span>
+              <div
+                class="body-row-custom-grid"
+                *ngFor="let cuenta of prestamista.cuenta_ahorro"
+              >
+                <div class="col-body-custom-grid"></div>
+                <div class="col-body-custom-grid"></div>
+                <div class="col-body-custom-grid">
+                  <span [innerText]="parseBanco(cuenta.banco_id)"></span>
+                </div>
+                <div class="col-body-custom-grid">
+                  <span [innerText]="cuenta.cuenta_numero"></span>
+                </div>
               </div>
-              <div class="col-body-custom-grid">
-                <span
-                  [innerText]="prestamista.cuenta_ahorro.cuenta_numero"
-                ></span>
-              </div>
-            </div>
+            </ng-container>
             <!-- <ng-container
               *ngIf="
                 prestamista.creditCards && prestamista.creditCards.length > 0

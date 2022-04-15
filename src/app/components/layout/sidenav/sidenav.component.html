@@ -98,8 +98,19 @@
         aria-label="breadcrumb"
       >
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="#">Home</a></li>
-          <li class="breadcrumb-item active" aria-current="page">Library</li>
+          <li
+            class="breadcrumb-item"
+            [class.active]="bread.current"
+            *ngFor="let bread of breadcrums"
+            [attr.aria-current]="bread.current ? 'page' : ''"
+          >
+            <span *ngIf="!bread.link" [innerText]="bread.label"></span>
+            <a
+              *ngIf="bread.link"
+              [routerLink]="bread.link"
+              [innerText]="bread.label"
+            ></a>
+          </li>
         </ol>
       </nav>
       <router-outlet></router-outlet>

@@ -4,6 +4,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { EstadoSolicitudInterface } from 'src/app/commons/state/interfaces/estado-solicitud-interface';
 import Swal from 'sweetalert2';
+import { BreadcrumService } from 'src/app/services/layout/breadcrum.service';
 
 @Component({
   selector: 'app-estado-solicitudes',
@@ -18,10 +19,28 @@ export class EstadoSolicitudesComponent implements OnInit {
   loading = false;
   estadoSolicitudes: Array<EstadoSolicitudInterface> = [];
   constructor(
-    private readonly estadoSolicitudesApiService: EstadoSolicitudesApiService
+    private readonly estadoSolicitudesApiService: EstadoSolicitudesApiService,
+    private readonly breadcrumService: BreadcrumService
   ) {}
 
   ngOnInit(): void {
+    this.breadcrumService.setBreadcrum([
+      {
+        label: 'Inicio',
+        current: false,
+        link: '/',
+      },
+      {
+        label: 'Datos Generales',
+        current: false,
+        link: '/resources/',
+      },
+      {
+        label: 'Bancos',
+        current: true,
+        link: undefined,
+      },
+    ]);
     this.initTable();
   }
   initTable(): void {

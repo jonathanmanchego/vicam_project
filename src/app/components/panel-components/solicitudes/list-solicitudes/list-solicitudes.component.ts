@@ -1,3 +1,4 @@
+import { BreadcrumService } from './../../../../services/layout/breadcrum.service';
 import { saveAs } from 'file-saver';
 import { PlazosPagoInterface } from 'src/app/commons/state/interfaces/plazos-pago-interface';
 import Swal from 'sweetalert2';
@@ -18,10 +19,23 @@ export class ListSolicitudesComponent implements OnInit {
   constructor(
     private readonly solicitudApiService: SolicitudApiService,
     private readonly contratoApiService: ContratoApiService,
-    private readonly loadingService: LoadingService
+    private readonly loadingService: LoadingService,
+    private readonly breadcrumService: BreadcrumService
   ) {}
 
   ngOnInit(): void {
+    this.breadcrumService.setBreadcrum([
+      {
+        label: 'Inicio',
+        current: false,
+        link: '/',
+      },
+      {
+        label: 'Solicitudes',
+        current: true,
+        link: undefined,
+      },
+    ]);
     this.initSolicitudes();
   }
   initSolicitudes(): void {
