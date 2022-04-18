@@ -17,5 +17,5 @@ export interface TarjetaInterface extends ModelInterface {
   amount?: number;
   cuotas?: number;
   cuotas_monto?: number;
-  cuentas_ahorro?: CuentaAhorroInterface[];
+  cuenta_ahorro?: CuentaAhorroInterface[] | CuentaAhorroInterface;
 }

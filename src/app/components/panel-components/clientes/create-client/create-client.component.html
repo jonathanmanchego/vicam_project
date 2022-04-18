@@ -61,56 +61,62 @@
         </mat-form-field>
       </div>
       <div class="row-fields">
-        <mat-form-field
-          appearance="outline"
-          class="col-lg-6 col-sm-12 col-md-6"
-        >
+        <mat-form-field appearance="outline" class="col-lg-3 col-sm-6 col-md-3">
           <mat-label>País:</mat-label>
-          <mat-select formControlName="pais">
-            <mat-option *ngFor="let bank of banks" [value]="bank.id">
-              {{ bank.banco_name }}
+          <mat-select
+            formControlName="pais"
+            (selectionChange)="changeSelect($event, 'departamento')"
+          >
+            <mat-option *ngFor="let pais of paises" [value]="pais.id">
+              {{ pais.pais }}
             </mat-option>
           </mat-select>
           <mat-error *ngIf="validateFormControl('pais')"
             >{{ validateFormControl('pais') }}
           </mat-error>
         </mat-form-field>
-        <mat-form-field
-          appearance="outline"
-          class="col-lg-6 col-sm-12 col-md-6"
-        >
+        <mat-form-field appearance="outline" class="col-lg-3 col-sm-6 col-md-3">
           <mat-label>Departamento:</mat-label>
-          <mat-select formControlName="departamento">
-            <mat-option *ngFor="let bank of banks" [value]="bank.id">
-              {{ bank.banco_name }}
+          <mat-select
+            formControlName="departamento"
+            (selectionChange)="changeSelect($event, 'provincia')"
+          >
+            <mat-option
+              *ngFor="let departamento of departamentosFiltrados"
+              [value]="departamento.id"
+            >
+              {{ departamento.departamento }}
             </mat-option>
           </mat-select>
           <mat-error *ngIf="validateFormControl('departamento')"
             >{{ validateFormControl('departamento') }}
           </mat-error>
         </mat-form-field>
-        <mat-form-field
-          appearance="outline"
-          class="col-lg-6 col-sm-12 col-md-6"
-        >
+        <mat-form-field appearance="outline" class="col-lg-3 col-sm-6 col-md-3">
           <mat-label>Provincia:</mat-label>
-          <mat-select formControlName="provincia">
-            <mat-option *ngFor="let bank of banks" [value]="bank.id">
-              {{ bank.banco_name }}
+          <mat-select
+            formControlName="provincia"
+            (selectionChange)="changeSelect($event, 'localidad')"
+          >
+            <mat-option
+              *ngFor="let provincia of provinciasFiltrados"
+              [value]="provincia.id"
+            >
+              {{ provincia.provincia }}
             </mat-option>
           </mat-select>
           <mat-error *ngIf="validateFormControl('provincia')"
             >{{ validateFormControl('provincia') }}
           </mat-error>
         </mat-form-field>
-        <mat-form-field
-          appearance="outline"
-          class="col-lg-6 col-sm-12 col-md-6"
-        >
+        <mat-form-field appearance="outline" class="col-lg-3 col-sm-6 col-md-3">
           <mat-label>Localidad:</mat-label>
           <mat-select formControlName="localidad">
-            <mat-option *ngFor="let bank of banks" [value]="bank.id">
-              {{ bank.banco_name }}
+            <mat-option
+              *ngFor="let localidad of localidadesFiltrados"
+              [value]="localidad.id"
+            >
+              {{ localidad.localia }}
             </mat-option>
           </mat-select>
           <mat-error *ngIf="validateFormControl('localidad')"
@@ -125,6 +131,21 @@
           <input matInput formControlName="address" autocomplete="off" />
           <mat-error *ngIf="validateFormControl('address')"
             >{{ validateFormControl('address') }}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field
+          appearance="outline"
+          class="col-lg-6 col-sm-12 col-md-6"
+        >
+          <mat-label>Correo electrónico:</mat-label>
+          <input
+            matInput
+            formControlName="email"
+            type="email"
+            autocomplete="off"
+          />
+          <mat-error *ngIf="validateFormControl('email')"
+            >{{ validateFormControl('email') }}
           </mat-error>
         </mat-form-field>
       </div>
@@ -176,7 +197,7 @@
           <mat-label>Duración del contrato:</mat-label>
           <mat-select
             formControlName="duration"
-            (valueChange)="changeDurationContract($event)"
+            (selectionChange)="changeDurationContract($event)"
           >
             <mat-option *ngFor="let plazo of plazos" [value]="plazo.id">
               {{ plazo.plazo_pago_meses }}

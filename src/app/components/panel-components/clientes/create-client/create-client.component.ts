@@ -24,6 +24,15 @@ import { TipoTarjetaInterface } from 'src/app/commons/state/interfaces/tipo-tarj
 import { SolicitudApiService } from 'src/app/services/api/solicitud-api.service';
 import { SolicitudInterface } from 'src/app/commons/state/interfaces/solicitud-interface';
 import * as moment from 'moment';
+import { PaisInterface } from 'src/app/commons/state/interfaces/pais-interface';
+import { ProvinciaInterface } from 'src/app/commons/state/interfaces/provincia-interface';
+import { DepartamentoInterface } from 'src/app/commons/state/interfaces/departamento-interface';
+import { LocalidadInterface } from 'src/app/commons/state/interfaces/localidad-interface';
+import { PaisApiService } from 'src/app/services/api/pais-api.service';
+import { DepartamentoApiService } from 'src/app/services/api/departamento-api.service';
+import { ProvinciaApiService } from 'src/app/services/api/provincia-api.service';
+import { LocalidadApiService } from 'src/app/services/api/localidad-api.service';
+import { LoadingService } from 'src/app/services/layout/loading.service';
 
 interface UserInterface {
   user_nick: string;
@@ -61,23 +70,36 @@ export class CreateClientComponent implements OnInit {
     duration: new FormControl(2),
     amount: new FormControl(0, Validators.required),
     pais: new FormControl(),
-    departamento: new FormControl(),
-    provincia: new FormControl(),
-    localidad: new FormControl(),
+    departamento: new FormControl({ value: '', disabled: true }),
+    provincia: new FormControl({ value: '', disabled: true }),
+    localidad: new FormControl({ value: '', disabled: true }),
   });
   creditCards: TarjetaInterface[] = [];
   banks: BankInterface[] = [];
   plazos: PlazosPagoInterface[] = [];
   tipoTarjetas: TipoTarjetaInterface[] = [];
+  paises: PaisInterface[] = [];
+  departamentos: DepartamentoInterface[] = [];
+  departamentosFiltrados: DepartamentoInterface[] = [];
+  provincias: ProvinciaInterface[] = [];
+  provinciasFiltrados: ProvinciaInterface[] = [];
+  localidades: LocalidadInterface[] = [];
+  localidadesFiltrados: LocalidadInterface[] = [];
+
   loading = false;
 
   constructor(
     private readonly tipoTarjetaApiService: TipoTarjetaApiService,
+    private readonly loadingService: LoadingService,
     private readonly tarjetaApiService: TarjetaApiService,
     private readonly prestamistaApiService: PrestamistaApiService,
     private readonly bankApiService: BankApiService,
     private readonly plazosPagosApiService: PlazosPagosApiService,
     private readonly solicitudApiService: SolicitudApiService,
+    private readonly paisApiService: PaisApiService,
+    private readonly departamentoApiService: DepartamentoApiService,
+    private readonly provinciaApiService: ProvinciaApiService,
+    private readonly localidadApiService: LocalidadApiService,
     private readonly route: Router
   ) {}
 
@@ -93,24 +115,44 @@ export class CreateClientComponent implements OnInit {
     if (this.plazosPagosApiService.getValues().length === 0) {
       observables.push(this.plazosPagosApiService.getAll());
     }
+    if (this.paisApiService.getValues().length === 0) {
+      observables.push(this.paisApiService.getAll());
+    }
+    if (this.departamentoApiService.getValues().length === 0) {
+      observables.push(this.departamentoApiService.getAll());
+    }
+    if (this.provinciaApiService.getValues().length === 0) {
+      observables.push(this.provinciaApiService.getAll());
+    }
+    if (this.localidadApiService.getValues().length === 0) {
+      observables.push(this.localidadApiService.getAll());
+    }
     // if (this.tipoTarjetaApiService.getValues().length === 0) {
     //   observables.push(this.tipoTarjetaApiService.getAll());
     // }
     if (observables.length > 0) {
-      this.loading = true;
+      this.loadingService.startLoading();
       forkJoin(observables).subscribe({
         next: () => {
           this.banks = this.bankApiService.getValues();
           this.plazos = this.plazosPagosApiService.getValues();
+          this.paises = this.paisApiService.getValues();
+          this.departamentos = this.departamentoApiService.getValues();
+          this.provincias = this.provinciaApiService.getValues();
+          this.localidades = this.localidadApiService.getValues();
           // this.tipoTarjetas = this.tipoTarjetaApiService.getValues();
         },
         complete: () => {
-          this.loading = false;
+          this.loadingService.stopLoading();
         },
         error: () => {
-          this.loading = false;
+          this.loadingService.stopLoading();
           this.banks = this.bankApiService.getValues();
           this.plazos = this.plazosPagosApiService.getValues();
+          this.paises = this.paisApiService.getValues();
+          this.departamentos = this.departamentoApiService.getValues();
+          this.provincias = this.provinciaApiService.getValues();
+          this.localidades = this.localidadApiService.getValues();
           // this.tipoTarjetas = this.tipoTarjetaApiService.getValues();
           Swal.fire({
             title: '¡Atención!',
@@ -122,7 +164,36 @@ export class CreateClientComponent implements OnInit {
     } else {
       this.banks = this.bankApiService.getValues();
       this.plazos = this.plazosPagosApiService.getValues();
+      this.paises = this.paisApiService.getValues();
+      this.departamentos = this.departamentoApiService.getValues();
+      this.provincias = this.provinciaApiService.getValues();
+      this.localidades = this.localidadApiService.getValues();
     }
+  }
+  changeSelect(
+    $event: MatSelectChange,
+    option: 'departamento' | 'provincia' | 'localidad'
+  ): void {
+    if (option === 'departamento') {
+      this.departamentosFiltrados = this.departamentos.filter(
+        (item) => item.pais_id === $event.value
+      );
+    }
+    if (option === 'provincia') {
+      this.provinciasFiltrados = this.provincias.filter(
+        (item) => item.departamento_id === $event.value
+      );
+    }
+    if (option === 'localidad') {
+      this.localidadesFiltrados = this.localidades.filter(
+        (item) => item.provincia_id === $event.value
+      );
+    }
+    const formField = this.formCreateClient.get(option);
+    formField?.enable();
+
+    formField?.patchValue('', [Validators.required]);
+    formField?.updateValueAndValidity();
   }
   initCreditCards(): void {
     if (this.isCreditCard()) {
@@ -155,8 +226,8 @@ export class CreateClientComponent implements OnInit {
       prestamista_id: 0,
     });
   }
-  changeDurationContract(event: number): void {
-    const plazo = this.plazos.find((item) => item.id === event);
+  changeDurationContract(event: MatSelectChange): void {
+    const plazo = this.plazos.find((item) => item.id === event.value);
     this.formCreateClient.patchValue({
       interes: (Number(plazo?.plazo_pago_tasa_interes) * 100).toFixed(2) + '%',
     });
@@ -189,6 +260,7 @@ export class CreateClientComponent implements OnInit {
       });
       return;
     }
+    this.loadingService.startLoading();
     const {
       firstName,
       lastName,
@@ -202,8 +274,9 @@ export class CreateClientComponent implements OnInit {
       amount,
       bank,
       pais,
+      departamento,
       provincia,
-      localia,
+      localidad,
     } = this.formCreateClient.value;
 
     const bankSelected = this.banks.find((item) => item.id === +bank);
@@ -220,8 +293,9 @@ export class CreateClientComponent implements OnInit {
         prestamista_password: '',
         prestamista_celular2: '',
         pais_id: pais,
+        departamento_id: departamento,
         provincia_id: provincia,
-        localia_id: localia,
+        localia_id: localidad,
       },
       user_nick: '',
       user_password: '',
@@ -276,9 +350,10 @@ export class CreateClientComponent implements OnInit {
                     solicitud_boucher: '',
                     banco_id: +bank,
                     cuenta_ahorro_id:
-                      tarjetaCreated.cuentas_ahorro &&
-                      tarjetaCreated.cuentas_ahorro.length > 0
-                        ? tarjetaCreated.cuentas_ahorro[0].id
+                      tarjetaCreated.cuenta_ahorro &&
+                      Array.isArray(tarjetaCreated.cuenta_ahorro) &&
+                      tarjetaCreated.cuenta_ahorro.length > 0
+                        ? tarjetaCreated.cuenta_ahorro[0].id
                         : 0,
                     estado_solicitud_id: 1,
                     plazo_pago_id: duration,
@@ -292,7 +367,7 @@ export class CreateClientComponent implements OnInit {
                   };
                   this.solicitudApiService.create(solicitud).subscribe(
                     () => {
-                      this.loading = false;
+                      this.loadingService.stopLoading();
                       Swal.fire({
                         title: 'Correcto',
                         text: 'Se pudo guardar correctamente',
@@ -302,7 +377,7 @@ export class CreateClientComponent implements OnInit {
                       this.route.navigateByUrl('/clientes');
                     },
                     () => {
-                      this.loading = false;
+                      this.loadingService.stopLoading();
                       Swal.fire({
                         title: '¡Atención!',
                         text: 'No se pudo guardar correctamente',
@@ -312,7 +387,7 @@ export class CreateClientComponent implements OnInit {
                   );
                 },
                 error: () => {
-                  this.loading = false;
+                  this.loadingService.stopLoading();
                   Swal.fire({
                     title: '¡Atención!',
                     text: 'No se pudo guardar correctamente',
@@ -322,7 +397,7 @@ export class CreateClientComponent implements OnInit {
               });
             },
             error: () => {
-              this.loading = false;
+              this.loadingService.stopLoading();
               Swal.fire({
                 title: '¡Atención!',
                 text: 'No se pudo guardar correctamente',
@@ -339,9 +414,10 @@ export class CreateClientComponent implements OnInit {
                 solicitud_boucher: '',
                 banco_id: +bank,
                 cuenta_ahorro_id:
-                  tarjetaCreated.cuentas_ahorro &&
-                  tarjetaCreated.cuentas_ahorro.length > 0
-                    ? tarjetaCreated.cuentas_ahorro[0].id
+                  tarjetaCreated.cuenta_ahorro &&
+                  Array.isArray(tarjetaCreated.cuenta_ahorro) &&
+                  tarjetaCreated.cuenta_ahorro.length > 0
+                    ? tarjetaCreated.cuenta_ahorro[0].id
                     : 0,
                 estado_solicitud_id: 1,
                 plazo_pago_id: duration,
@@ -355,7 +431,7 @@ export class CreateClientComponent implements OnInit {
               };
               this.solicitudApiService.create(solicitud).subscribe(
                 () => {
-                  this.loading = false;
+                  this.loadingService.stopLoading();
                   Swal.fire({
                     title: 'Correcto',
                     text: 'Se pudo guardar correctamente',
@@ -365,20 +441,20 @@ export class CreateClientComponent implements OnInit {
                   this.route.navigateByUrl('/clientes');
                 },
                 () => {
-                  this.loading = false;
+                  this.loadingService.stopLoading();
                   Swal.fire({
                     title: '¡Atención!',
-                    text: 'No se pudo guardar correctamente',
+                    text: 'No se pudo guardar correctamente la solicitud',
                     icon: 'info',
                   });
                 }
               );
             },
             error: () => {
-              this.loading = false;
+              this.loadingService.stopLoading();
               Swal.fire({
                 title: '¡Atención!',
-                text: 'No se pudo guardar correctamente',
+                text: 'No se pudo guardar correctamente la tarjeta',
                 icon: 'info',
               });
             },
@@ -386,9 +462,10 @@ export class CreateClientComponent implements OnInit {
         }
       },
       error: () => {
+        this.loadingService.stopLoading();
         Swal.fire({
           title: '¡Atención!',
-          text: 'No se pudo guardar correctamente',
+          text: 'No se pudo guardar correctamente el prestamista',
           icon: 'info',
         });
       },

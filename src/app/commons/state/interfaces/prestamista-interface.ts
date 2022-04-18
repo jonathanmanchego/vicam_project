@@ -15,6 +15,7 @@ export interface PrestamistaInterface extends ModelInterface {
   prestamista_direccion: string;
   localia_id: number;
   provincia_id: number;
+  departamento_id: number;
   pais_id: number;
   tarjetas?: TarjetaInterface[];
   cuenta_ahorro?: CuentaAhorroInterface[];
